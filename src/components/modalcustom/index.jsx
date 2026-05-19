@@ -7,7 +7,7 @@ import { StatusBar } from "expo-status-bar";
 export const ModalCustom = () => {
     const { activenotification, setactivenotification, msgnotification, statusapi} = useContext(SingupContext)
     const getIcon = () => {
-        console.log(statusapi)
+        
         if (statusapi === 200) {
             return (
                 <View style={styles.iconCircleSucess}>
@@ -30,11 +30,11 @@ export const ModalCustom = () => {
             )
         }
     }
-    useEffect(() => {
-        if (activenotification) {
-            console.log("O modal acabou de abrir com a messagem:", msgnotification)
-        }
-    }, [activenotification, msgnotification])
+    // useEffect(() => {
+    //     if (activenotification) {
+    //         console.log("O modal acabou de abrir com a messagem:", msgnotification)
+    //     }
+    // }, [activenotification, msgnotification])
     return (
         <Modal
             animationType={'slide'}

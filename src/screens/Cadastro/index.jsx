@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, ScrollView, Platform, TouchableWithoutFeedback, Keyboard, Image, Text, View, TextInput, Touchable, TouchableOpacity, Alert, ImageBackground } from "react-native";
+import { KeyboardAvoidingView, ScrollView, Platform, TouchableWithoutFeedback, Keyboard,  Text, View, TextInput, Touchable, TouchableOpacity, Alert, ImageBackground } from "react-native";
 import icon from '../../constants/icon.js'
 import { Button } from "../../components/button/button.jsx";
 import { EyesButton } from "../../components/button/button.jsx";
@@ -98,7 +98,6 @@ function Cadastro(props) {
                                 <Image source={icon.lock} style={telefonevalido ? styles.inputIcon : styles.inputIconDisable}></Image>
                                 <TextInput style={telefonevalido ? styles.input : styles.inputDisable} secureTextEntry={hidepassword} placeholderTextColor={telefonevalido ? '#000' : 'rgb(44, 151, 151)'} placeholder="Senha..." onChangeText={(e) => setsingpassword(e)} editable={telefonevalido}></TextInput>
                                 <EyesButton
-                                
                                 onPress={()=>sethidepassword(!hidepassword)}
                                 showPassword={!hidepassword}
                                 ></EyesButton>

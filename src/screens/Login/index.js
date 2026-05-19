@@ -1,36 +1,76 @@
 import { StyleSheet } from "react-native";
 import {color,font_Size} from '../../constants/theme.js'
 export const styles = StyleSheet.create({
-    container:{
-        backgroundColor:color.white,
-        padding:40,
-        flex:1,
-        justifyContent:'space-around'
+    container: {
+        flex: 1,
+        backgroundColor: '#F8F9FA',
+        alignItems: 'center',
+        padding: 20
+    },
+    backgroundImage: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        // opacity:0.1
     },
     logo: {
-        width:'100%',
-        height:'20%',
-        objectFit:"cover"
+        width: 250,
+        height: 200,
+        resizeMode: 'contain',
+        marginTop: 40,
+        marginBottom: 20
     },
-    containerinput:{
-        gap:15
+    containerinput: {
+        width: '100%',
+        paddingHorizontal: 10
     },
-    input:{
-        backgroundColor:color.gray5,
-        padding:25,
-        borderRadius:15,
-        fontSize:22,
+    inputWrapper: {
+        flexDirection: 'row',
+        alignContent: "center",
+        borderBottomWidth: 1,
+        borderBottomColor: '#CCC',
+        marginBottom: 25,
+        height: 50
     },
-    footer:{
-        flexDirection:"row",
-        justifyContent:'center',
-        gap:5
+    inputIcon: {
+        width: 30,
+        height: 30,
+        marginRight: 10,
+        tintColor: '#666',
     },
-    textfoot:{
-        fontSize:20,
+    inputIconDisable: {
+        width: 30,
+        height: 30,
+        marginRight: 10,
+        tintColor: '#cfc7c7',
     },
-    textlink:{
-        color:color.blue,
-        fontSize:20
+    input: {
+        flex: 1,
+        fontSize: 16,
+        color: '#666'
+        // backgroundColor:color.gray5,
+    },
+    inputDisable: {
+        flex: 1,
+        fontSize: 16,
+        color: '##cfc7c7'
+        // backgroundColor:color.gray5,
+    },
+    buttonContainer: {
+        width: '100%',
+        marginTop: 30,
+    },
+    footer: {
+        flexDirection: "row",
+        marginTop: 30
+    },
+    textfoot: {
+        color: '#666',
+        fontSize: 18
+    },
+    textlink: {
+        color: '#0066FF',
+        fontSize: 18,
+        fontWeight: 'bold'
     }
 })
