@@ -26,14 +26,12 @@ export const SingupProvider = ({ children }) => {
         try {
             const response = await api.post('/users/singup', dadosparaapi)
             if (response.data) {
-                console.log('pass')
                 setloading(true)
                 await waiting(2500)
                 setstatusapi(response.status)
                 setactivenotification(true)
                 setmsgnotification('Usuario cadastrado com sucesso!!!')
                 const token = response.data.token;
-
                 // props.navigation.navigate("login")
             }
         } catch (error) {
@@ -49,7 +47,6 @@ export const SingupProvider = ({ children }) => {
                 console.log(error.response.data.error)
             }
         } finally {
-        
             setloading(false)
         }
 

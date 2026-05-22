@@ -6,14 +6,17 @@ import Routes from './src/routes/routes.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthProvider } from './src/contexts/auth.js';
 import { SingupProvider } from './src/contexts/user.jsx';
+import { LoginProvider } from './src/contexts/login.jsx';
 export default function App() {
   return (
     <NavigationContainer>
-      <SingupProvider>
-        <AuthProvider>
-          <Routes></Routes>
-        </AuthProvider>
-      </SingupProvider>
+      <AuthProvider>
+        <LoginProvider>
+          <SingupProvider>
+            <Routes></Routes>
+          </SingupProvider>
+        </LoginProvider>
+      </AuthProvider>
     </NavigationContainer>
   )
 }

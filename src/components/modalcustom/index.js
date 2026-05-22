@@ -47,6 +47,15 @@ export const styles = StyleSheet.create({
         alignItens: 'center',
         marginRight: 10,
     },
+    iconCircleError: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        backgroundColor: '#ff0202',
+        justifyContent: 'center',
+        alignItens: 'center',
+        marginRight: 10,
+    },
     iconTextAlert: {
         color: 'black',
         fontSize: 22,
@@ -61,7 +70,7 @@ export const styles = StyleSheet.create({
     },
     button: {
         borderRadius: 10,
-        padding:15,
+        padding: 15,
         elevation: 2,
         marginTop: 15,
         width: "100%",
@@ -77,7 +86,7 @@ export const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',
-        fontSize:20,
+        fontSize: 20,
     },
     modalTextTitle: {
         fontSize: 20,
@@ -87,7 +96,7 @@ export const styles = StyleSheet.create({
     modalTextMessage: {
         fontSize: 20,
         textAlign: "center",
-        fontWeight:"bold",
+        fontWeight: "bold",
         color: "#333",
         marginVertical: 15
     }

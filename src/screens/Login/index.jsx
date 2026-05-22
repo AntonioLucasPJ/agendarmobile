@@ -2,46 +2,28 @@ import { Image, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, T
 import icon from '../../constants/icon.js'
 import { Button } from "../../components/button/button.jsx";
 import { styles } from './index.js'
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { EyesButton } from "../../components/button/button.jsx";
 import { AuthContext } from "../../contexts/auth.js";
 import Loading from "../../components/loading/index.jsx";
 import api from "../../constants/api.js";
+import { ModalCustom } from "../../components/modalcustom/index.jsx";
+import { LoginContext } from "../../contexts/login.jsx";
+import { LoaderIcon } from "lucide-react-native";
 
 function Login(props) {
-    const [email, setemail] = useState('')
-    const [password, setpassword] = useState('')
-    const [hidepassword,sethidepassword] = useState(false)
-    const { user, setuser,loading,setloading} = useContext(AuthContext);
-    const nomevalido = true;
-    const emailvalido = true;
-    const telefonevalido = true;
-    const passwordvalido = true;
-    const cpf = true;
-    const cpfvalido = true
+    const [hidepassword, sethidepassword] = useState(false)
+    const { user, setuser, } = useContext(AuthContext);
+    const { loading, statusapi, activenotification, setactivenotification, msgnotification, setloading, loginemail, setloginemail, loginpassword, setloginpassword, AcessLogin } = useContext(LoginContext)
+    const emailvalido = loginemail.includes('@') && loginemail.includes('.');
+    const passwordvalido = loginpassword.trim().length >= 6
 
     async function LoginBD() {
-        try {
-            const response = await api.post('/users/login', {
-                email,
-                password
-            })
-            if (response.data) {
-                api.defaults.headers.common['Authorization'] = `Bearer ` + response.data.token;
-                setuser(response.data)
-            }
-        } catch (error) {
-            if (error.response.data.message) {
-                Alert.alert(error.response.data.message)
-            } else {
-                Alert.alert("O ocorreu um erro desconhecido tente novamente!")
-            }
-        }
+        AcessLogin()
     }
     function RedirectCadastro() {
         props.navigation.navigate('cadastro')
     }
-
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -52,33 +34,38 @@ function Login(props) {
                     contentContainerStyle={{ flexGrow: 1 }}
                     keyboardShouldPersistTaps="handled"
                 >
-                    <ImageBackground 
-                    style={styles.container}
-                    source={icon.background}
-                    resizeMode="cover">
+                    <ImageBackground
+                        style={styles.container}
+                        source={icon.background}
+                        resizeMode="cover">
                         <Loading visible={loading}></Loading>
                         <Image source={icon.logo} style={styles.logo}></Image>
                         <View style={styles.containerinput}>
+                            {activenotification ?
+                                <ModalCustom msgmodal={msgnotification} statusapi={statusapi} onClose={() => setactivenotification(!activenotification)}></ModalCustom>
+                                :''
+
+                            }
                             <View style={styles.inputWrapper}>
-                                <Image source={icon.email} style={nomevalido ? styles.inputIcon : styles.inputIconDisable}></Image>
-                                <TextInput keyboardType="email-address" style={nomevalido ? styles.input : styles.inputDisable} placeholder='Digite seu email' placeholderTextColor={nomevalido ? '#000' : 'rgb(44, 151, 151)'} onChangeText={(e) => setsingemail(e)} editable={nomevalido} value={email}></TextInput>
+                                <Image source={icon.email} style={styles.inputIcon}></Image>
+                                <TextInput keyboardType="email-address" style={styles.input} placeholder='Digite seu email' onChangeText={(e) => setloginemail(e)} value={loginemail}></TextInput>
                             </View>
                             <View style={styles.inputWrapper}>
-                                <Image source={icon.lock} style={telefonevalido ? styles.inputIcon : styles.inputIconDisable}></Image>
-                                <TextInput style={telefonevalido ? styles.input : styles.inputDisable} secureTextEntry={hidepassword} placeholderTextColor={telefonevalido ? '#000' : 'rgb(44, 151, 151)'} placeholder="Senha..." onChangeText={(e) => setsingpassword(e)} editable={telefonevalido}></TextInput>
+                                <Image source={icon.lock} style={emailvalido ? styles.inputIcon : styles.inputIconDisable}></Image>
+                                <TextInput style={emailvalido ? styles.input : styles.inputDisable} secureTextEntry={hidepassword} placeholderTextColor={emailvalido ? '#000' : 'rgb(44, 151, 151)'} placeholder="Senha..." onChangeText={(e) => setloginpassword(e)} editable={emailvalido}></TextInput>
                                 <EyesButton
-                                onPress={()=>sethidepassword(!hidepassword)}
-                                showPassword={!hidepassword}
+                                    onPress={() => sethidepassword(!hidepassword)}
+                                    showPassword={!hidepassword}
                                 ></EyesButton>
                             </View>
                         </View>
                         {/* <Agreecheck></Agreecheck> */}
                         <View style={styles.buttonContainer} >
-                            <Button onPress={LoginBD} disabled={nomevalido & emailvalido & cpfvalido & telefonevalido & passwordvalido ? false : true} text='Criar Conta' />
+                            <Button onPress={LoginBD} disabled={emailvalido & passwordvalido ? false : true} text='Login' />
                         </View>
                         <View style={styles.footer}>
                             <Text style={styles.textfoot}>Ja possui uma conta?</Text>
-                            <TouchableOpacity onPress={() => props.navigation.goBack()}><Text style={styles.textlink}>Clique aqui</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={RedirectCadastro}><Text style={styles.textlink}>Clique aqui</Text></TouchableOpacity>
                         </View>
                     </ImageBackground>
                 </ScrollView>

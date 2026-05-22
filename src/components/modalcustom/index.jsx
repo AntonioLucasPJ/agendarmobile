@@ -3,11 +3,10 @@ import { Modal, Pressable, Text, View } from "react-native";
 import { SingupContext } from "../../contexts/user";
 import { styles } from './index.js'
 import { StatusBar } from "expo-status-bar";
+import { FaSlack } from "react-icons/fa6";
 
-export const ModalCustom = () => {
-    const { activenotification, setactivenotification, msgnotification, statusapi} = useContext(SingupContext)
+export const ModalCustom = ({statusapi,msgmodal,onClose}) => {
     const getIcon = () => {
-        
         if (statusapi === 200) {
             return (
                 <View style={styles.iconCircleSucess}>
@@ -15,16 +14,16 @@ export const ModalCustom = () => {
                 </View>
             )
         }
-        if(statusapi === 302){
+        if (statusapi === 302) {
             return (
                 <View style={styles.iconCircleAlert}>
                     <Text style={styles.iconTextAlert}>!</Text>
                 </View>
             )
         }
-         else {
+        else {
             return (
-                <View style={styles.iconCircleSucess}>
+                <View style={styles.iconCircleError}>
                     <Text style={styles.iconTextSucess}>X</Text>
                 </View>
             )
@@ -38,8 +37,8 @@ export const ModalCustom = () => {
     return (
         <Modal
             animationType={'slide'}
-            visible={activenotification}
-            onRequestClose={() => setactivenotification(false)}
+            onRequestClose={onClose}
+            transparent={true}
         >
             <View
                 style={styles.centeredView}
@@ -48,12 +47,12 @@ export const ModalCustom = () => {
                 <View style={styles.modalView}>
                     <View style={styles.headerContainer}>
                         {getIcon()}
-                        <Text style={styles.modalTextTitle}>Alert</Text>
+                        <Text style={styles.modalTextTitle}>Error</Text>
                     </View>
-                    <Text style={styles.modalTextMessage}>{msgnotification}</Text>
+                    <Text style={styles.modalTextMessage}>{msgmodal}</Text>
                     <Pressable
                         style={[styles.button, styles.buttonclose]}
-                        onPress={() => setactivenotification(false)}
+                        onPress={onClose}
                     >
                         <Text style={styles.textStyle}>Fechar</Text>
                     </Pressable>

@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, ScrollView, Platform, TouchableWithoutFeedback, Keyboard,  Text, View, TextInput, Touchable, TouchableOpacity, Alert, ImageBackground } from "react-native";
+import { KeyboardAvoidingView, ScrollView, Platform,Image, TouchableWithoutFeedback, Keyboard,  Text, View, TextInput, Touchable, TouchableOpacity, Alert, ImageBackground } from "react-native";
 import icon from '../../constants/icon.js'
 import { Button } from "../../components/button/button.jsx";
 import { EyesButton } from "../../components/button/button.jsx";
@@ -30,9 +30,9 @@ function Cadastro(props) {
     const passwordvalido = password.trim().length >= 8
     useEffect(() => {
         console.log(
-            loading
+            activenotification
         )
-    }, [loading])
+    }, [activenotification])
     const handletelefone = (e) => {
         const valorformatado = FormartarTelefone(e)
         settelefone(valorformatado)
