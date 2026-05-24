@@ -28,11 +28,6 @@ function Cadastro(props) {
     const telefonevalido = telefone.trim().length >= 11;
     const cpfvalido = cpf.trim().length >= 14
     const passwordvalido = password.trim().length >= 8
-    useEffect(() => {
-        console.log(
-            activenotification
-        )
-    }, [activenotification])
     const handletelefone = (e) => {
         const valorformatado = FormartarTelefone(e)
         settelefone(valorformatado)

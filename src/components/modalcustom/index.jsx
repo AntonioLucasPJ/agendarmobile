@@ -7,7 +7,7 @@ import { FaSlack } from "react-icons/fa6";
 
 export const ModalCustom = ({statusapi,msgmodal,onClose}) => {
     const getIcon = () => {
-        if (statusapi === 200) {
+        if (statusapi === 200 || statusapi === 201) {
             return (
                 <View style={styles.iconCircleSucess}>
                     <Text style={styles.iconTextSucess}>✓</Text>
@@ -47,7 +47,7 @@ export const ModalCustom = ({statusapi,msgmodal,onClose}) => {
                 <View style={styles.modalView}>
                     <View style={styles.headerContainer}>
                         {getIcon()}
-                        <Text style={styles.modalTextTitle}>Error</Text>
+                        <Text style={styles.modalTextTitle}>{statusapi}</Text>
                     </View>
                     <Text style={styles.modalTextMessage}>{msgmodal}</Text>
                     <Pressable

@@ -19,9 +19,6 @@ export function Calendary() {
     useEffect(() => {
         LoadData()
     },[])
-    useEffect(()=>{
-        console.log(loand)
-    })
     return (
 
         <View style={styles.container}>

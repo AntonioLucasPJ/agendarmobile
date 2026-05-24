@@ -23,9 +23,7 @@ function Login(props) {
     function RedirectCadastro() {
         props.navigation.navigate('cadastro')
     }
-    useEffect(()=>{
-        console.log(loading)
-    },[loading])
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
