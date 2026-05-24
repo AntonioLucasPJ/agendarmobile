@@ -43,6 +43,7 @@ export function TelaHome(props) {
                     ></Mecanico>
                 }}
             ></FlatList>
+            
         </View>
     )
 }

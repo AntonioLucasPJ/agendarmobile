@@ -17,13 +17,15 @@ function Login(props) {
     const { loading, statusapi, activenotification, setactivenotification, msgnotification, setloading, loginemail, setloginemail, loginpassword, setloginpassword, AcessLogin } = useContext(LoginContext)
     const emailvalido = loginemail.includes('@') && loginemail.includes('.');
     const passwordvalido = loginpassword.trim().length >= 6
-
     async function LoginBD() {
         AcessLogin()
     }
     function RedirectCadastro() {
         props.navigation.navigate('cadastro')
     }
+    useEffect(()=>{
+        console.log(loading)
+    },[loading])
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

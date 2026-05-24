@@ -17,6 +17,7 @@ export function Schedule(props) {
     const [selectdate, setselectdate] = useState('')
     const [booking_hour, setbooking_hour] = useState('10:00');
     async function AdicionarReserva() {
+        console.log(user.id_user)
         let iduser = user.id_user
         const booking_date = selectdate.toString().split('T')[0]
         if (booking_date && booking_hour != "") {
@@ -24,7 +25,7 @@ export function Schedule(props) {
                 const res = await api.post('/appointements', {
                     id_mecanico,
                     id_service,
-                    iduser,
+                    id_user:iduser,
                     booking_date,
                     booking_hour
                 })
