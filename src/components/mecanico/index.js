@@ -1,30 +1,109 @@
 import { StyleSheet } from "react-native";
 import { color, font_Size } from "../../constants/theme";
 export const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        flexDirection:"row",
-        gap:10,
-        borderWidth:1,
-        borderColor:color.gray4,
-        marginTop:5,
-        marginBottom:5,
-        borderRadius:10
-    },
-
-    infor1:{
-        flexDirection:'column',
-        justifyContent:'center'
-    },
-    titlemecanico:{
-        fontSize:font_Size.lg,
-    },
-    subtitle:{
-        fontSize:font_Size.sm,
-        color:color.gray3
-    },
-    img:{
-        width:100,
-        height:100,
-    }
+   card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 16,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#f1f5f9',
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 16,
+    backgroundColor: '#e2e8f0',
+  },
+  infoContainer: {
+    flex: 1,
+    paddingLeft: 16,
+    justifyContent: 'center',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: 8,
+  },
+  nameText: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#0f172a',
+  },
+  ratingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fef3c7',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    gap: 4,
+  },
+  ratingText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#d97706',
+  },
+  titleText: {
+    fontSize: 14,
+    color: '#475569',
+    fontWeight: '500',
+    marginTop: 2,
+  },
+  specialtyText: {
+    fontSize: 13,
+    color: '#64748b',
+    marginTop: 1,
+  },
+  iconsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    gap: 10,
+  },
+  iconItem: {
+    marginRight: 2,
+  },
+  rightContainer: {
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    height: 80,
+  },
+  expBadge: {
+    backgroundColor: '#f1f5f9',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  expText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#334155',
+  },
+  button: {
+    backgroundColor: '#2563eb',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+    shadowColor: '#2563eb',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
 })
