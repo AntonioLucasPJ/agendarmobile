@@ -4,8 +4,17 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F8F9FA',
-        alignItems: 'center',
-        padding: 20
+
+    },
+    scrollContainer:{
+        flexGrow:1,
+        justifyContent:'center',
+        paddingHorizontal:24,
+        paddingBottom:24
+    },
+    logoContainer:{
+        alignItems:"center",
+        marginBottom:40
     },
     backgroundImage: {
         position: 'absolute',
@@ -14,15 +23,20 @@ export const styles = StyleSheet.create({
         // opacity:0.1
     },
     logo: {
-        width: 250,
-        height: 200,
+        width: 180,
+        height: 60,
         resizeMode: 'contain',
         marginTop: 40,
         marginBottom: 20
     },
-    containerinput: {
-        width: '100%',
-        paddingHorizontal: 10
+    
+    formContainer: {
+        backgroundColor:'#ffffff',
+        borderRadius:20,
+        padding:24,
+        borderWidth:1,
+        borderColor:'#cbd5e1',
+        elevation:4
     },
     inputWrapper: {
         flexDirection: 'row',
@@ -31,6 +45,12 @@ export const styles = StyleSheet.create({
         borderBottomColor: '#CCC',
         marginBottom: 25,
         height: 50
+    },
+    btnText: {
+        color: '#ffffff',
+        fontSize: 11,
+        fontWeight: '700',
+        textTransform: 'uppercase',
     },
     inputIcon: {
         width: 30,

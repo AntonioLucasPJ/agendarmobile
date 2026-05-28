@@ -1,99 +1,148 @@
-import { StyleSheet } from "react-native";
+import { Platform, StatusBar, StyleSheet } from "react-native";
 import { color } from "../../constants/theme";
 
 export const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'#ffffff'
+    container: {
+        flex: 1,
+        backgroundColor: '#e2e8f0', // Fundo levemente acinzentado do mockup
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
-    banner:{
-        width:'100%',
-        height:400,
-        backgroundColor:color.blue,
-        justifyContent:"center",
-        alignItems:"center"
+    sectionTitle: {
+        fontSize: 24,
+        fontWeight: '500',
+        color: '#0f172a',
+        marginLeft: 16,
+        marginTop: 16,
+        marginBottom: 12,
+        letterSpacing: 0.5,
     },
-    img1:{
-        width:150,
-        height:150,
-
+    mecanicoCard: {
+        backgroundColor: '#ffffff',
+        borderRadius: 20,
+        padding: 14,
+        marginHorizontal: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#cbd5e1',
+        elevation: 3,
     },
-    textt1:{
-        fontSize:30,
-        color:'#fff',
-        fontWeight:"bold"
+    avatar: {
+        width: 80,
+        height: 85,
+        borderRadius: 14,
+        backgroundColor: '#cbd5e1',
     },
-    textt2:{
-        fontSize:20,
-        color:color.white
+    mecanicoInfo: {
+        flex: 1,
+        paddingLeft: 14,
     },
-
-    containerimglogo:{
-        width:'100%',
-        height:120,
-        alignItems:"center",
-        justifyContent:'center',
-        backgroundColor:'#000'
-        
+    mecanicoHeaderRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
-    text1:{
-        fontSize:20
+    mecanicoName: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#0f172a',
     },
-    imglogo:{
-        width:200,
-        height:'100%',
-        
+    ratingBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#475569',
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        borderRadius: 8,
     },
-    msgdiv:{
-        width:'100%',
-        height:'50%',
-        flexDirection:"row",
-        justifyContent:"center",
-        alignItems:"center"
+    ratingText: {
+        color: '#ffffff',
+        fontSize: 11,
+        fontWeight: '700',
+        marginRight: 4,
     },
-    textmsg:{
-        fontSize:20,
-        flexWrap:"wrap",
-        fontWeight:"bold",
-        color:'#2e62c2'
+    starsRow: {
+        flexDirection: 'row',
+        gap: 1,
     },
-    tp:{
-        width:'100%',
-        fontSize:25,
+    mecanicoTitle: {
+        fontSize: 15,
+        color: '#334155',
+        marginTop: 2,
     },
-    cardmecanico:{
-        width:'100%',
-        height:100,
-        flexDirection:'row',
-        marginTop:20,
-        backgroundColor:color.white,
-        borderCurve:color.red,
-        gap:15,
+    mecanicoSpecialty: {
+        fontSize: 14,
+        color: '#475569',
     },
-    imgcard:{
-        width:100,
-        height:'100%'
+    mecanicoFooterRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 6,
     },
-    mecanicoinfor:{
-        width:'100%',
-        justifyContent:"center"
-        
+    miniIcons: {
+        flexDirection: 'row',
     },
-    inforname:{
-        fontSize:25
+    experienceBadge: {
+        backgroundColor: '#475569',
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+        borderRadius: 10,
     },
-    inforsubtitle:{
-        fontSize:20,
-        color:color.gray3
+    experienceText: {
+        color: '#ffffff',
+        fontSize: 13,
+        fontWeight: '600',
     },
-    menu:{
-        width:'100%',
-        height:30,
-        flexDirection:'row',
-        justifyContent:"space-around"
+    contentErro: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 32, // Margem interna maior para o texto não colar nas bordas
     },
-    imgmenu:{
-        width:'8%',
-        height:'100%'
+    iconCircle: {
+        width: 140,
+        height: 140,
+        backgroundColor: '#cbd5e1',
+        borderRadius: 70,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 24,
+        elevation: 1,
+    },
+    tituloErro: {
+        fontSize: 22,
+        fontWeight: '700',
+        color: '#0f172a',
+        textAlign: 'center',
+        marginBottom: 10,
+    },
+    descricaoErro: {
+        fontSize: 15,
+        color: '#475569',
+        textAlign: 'center',
+        lineHeight: 22,
+        marginBottom: 32,
+    },
+    btnVoltar: {
+        backgroundColor: '#475569', // Tom cinza escuro elegante
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 14,
+        paddingHorizontal: 24,
+        borderRadius: 16,
+        width: '100%',
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 4,
+    },
+    btnVoltarText: {
+        color: '#ffffff',
+        fontSize: 15,
+        fontWeight: '700',
+        letterSpacing: 0.5,
     }
-})
+});

@@ -26,24 +26,29 @@ function Login(props) {
 
     return (
         <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={{ flex: 1 }}>
-            <TouchableWithoutFeedback
-                onPress={Keyboard.dismiss}>
-                <ScrollView
-                    contentContainerStyle={{ flexGrow: 1 }}
-                    keyboardShouldPersistTaps="handled"
-                >
-                    <ImageBackground
-                        style={styles.container}
-                        source={icon.background}
-                        resizeMode="cover">
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            style={{ flex: 1, backgroundColor: '#e2e8f0' }}>
+            <ImageBackground
+                style={styles.container}
+                source={icon.background}
+                resizeMode="cover"
+            >
+                <TouchableWithoutFeedback
+                    onPress={Keyboard.dismiss}>
+                    <ScrollView
+                        contentContainerStyle={styles.scrollContainer}
+                        keyboardShouldPersistTaps="handled"
+                        showsVerticalScrollIndicator={false}
+                    >
                         <Loading visible={loading}></Loading>
-                        <Image source={icon.logo} style={styles.logo}></Image>
+
+                        <View style={styles.logoContainer}>
+                            <Image source={icon.logo} style={styles.logo}></Image>
+                        </View>
                         <View style={styles.containerinput}>
                             {activenotification ?
                                 <ModalCustom msgmodal={msgnotification} statusapi={statusapi} onClose={() => setactivenotification(!activenotification)}></ModalCustom>
-                                :''
+                                : ''
 
                             }
                             <View style={styles.inputWrapper}>
@@ -67,10 +72,11 @@ function Login(props) {
                             <Text style={styles.textfoot}>Ja possui uma conta?</Text>
                             <TouchableOpacity onPress={RedirectCadastro}><Text style={styles.textlink}>Clique aqui</Text></TouchableOpacity>
                         </View>
-                    </ImageBackground>
-                </ScrollView>
-            </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+
+                    </ScrollView>
+                </TouchableWithoutFeedback>
+            </ImageBackground>
+        </KeyboardAvoidingView >
     )
 }
 export default Login

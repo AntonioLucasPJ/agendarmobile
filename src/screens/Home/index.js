@@ -2,64 +2,79 @@ import { StyleSheet } from "react-native";
 import { color } from "../../constants/theme";
 
 export const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        padding:1,
-        backgroundColor:'#ffffff'
+    container: {
+        flex: 1,
+        padding: 1,
+        backgroundColor: '#ffffff'
     },
-    containerimglogo:{
-        width:'100%',
-        height:120,
-        alignItems:"center",
-        justifyContent:'center',
-        backgroundColor:'#000'
-        
+    sectionTitle: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#1e293b',
+        marginTop: 20,
+        marginBottom: 10,
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
     },
-    text1:{
-        fontSize:20
+    btnText: {
+        color: '#ffffff',
+        fontSize: 11,
+        fontWeight: '700',
+        textTransform: 'uppercase',
     },
-    imglogo:{
-        width:200,
-        height:'100%',
-        
+    containerimglogo: {
+        width: '100%',
+        height: 120,
+        alignItems: "center",
+        justifyContent: 'center',
+        backgroundColor: '#000'
+
     },
-    tp:{
-        width:'100%',
-        fontSize:25,
+    text1: {
+        fontSize: 20
     },
-    cardmecanico:{
-        width:'100%',
-        height:100,
-        flexDirection:'row',
-        marginTop:20,
-        backgroundColor:color.white,
-        borderCurve:color.red,
-        gap:15,
+    imglogo: {
+        width: 200,
+        height: '100%',
+
     },
-    imgcard:{
-        width:100,
-        height:'100%'
+    tp: {
+        width: '100%',
+        fontSize: 25,
     },
-    mecanicoinfor:{
-        width:'100%',
-        justifyContent:"center"
-        
+    cardmecanico: {
+        width: '100%',
+        height: 100,
+        flexDirection: 'row',
+        marginTop: 20,
+        backgroundColor: color.white,
+        borderCurve: color.red,
+        gap: 15,
     },
-    inforname:{
-        fontSize:25
+    imgcard: {
+        width: 100,
+        height: '100%'
     },
-    inforsubtitle:{
-        fontSize:20,
-        color:color.gray3
+    mecanicoinfor: {
+        width: '100%',
+        justifyContent: "center"
+
     },
-    menu:{
-        width:'100%',
-        height:30,
-        flexDirection:'row',
-        justifyContent:"space-around"
+    inforname: {
+        fontSize: 25
     },
-    imgmenu:{
-        width:'8%',
-        height:'100%'
+    inforsubtitle: {
+        fontSize: 20,
+        color: color.gray3
+    },
+    menu: {
+        width: '100%',
+        height: 30,
+        flexDirection: 'row',
+        justifyContent: "space-around"
+    },
+    imgmenu: {
+        width: '8%',
+        height: '100%'
     }
 })
