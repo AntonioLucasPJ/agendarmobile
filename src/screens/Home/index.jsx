@@ -27,7 +27,6 @@ export function TelaHome(props) {
         LoadHome()
     }, [])
     return (
-
         <View style={styles.container}>
             <Text style={styles.sectionTitle}>Selecione o Mecanico</Text>
             <FlatList   
