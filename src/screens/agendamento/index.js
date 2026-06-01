@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     hourButtonActive: {
-        backgroundColor: '#14213d',
+        backgroundColor: '#ff0037',
         borderColor: '#14213d'
     },
     hourButtonDisabled: {
@@ -106,7 +106,7 @@ export const styles = StyleSheet.create({
         color: '#475569'
     },
     hourTextActive: {
-        color: '#ffffff',
+        color: '#cc4b4b',
         fontWeight: 'bold'
     },
     hourTextDisabled: {

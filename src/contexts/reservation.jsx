@@ -12,12 +12,12 @@ export const ReservationProvider = ({ children }) => {
     const navigation = useNavigation()
     const { user } = useContext(AuthContext)
     const [loand, setloand] = useState(false)
-    const [horariosdisponiveis, sethorariosdisponiveis] = useState([''])
+    const [horariosdisponiveis, sethorariosdisponiveis] = useState([])
     const [loadinghours, setloadhours] = useState(false)
     const [updatescreen, setupdatescreen] = useState(false)
     const [loandcalendary, setloandcalendary] = useState(false)
     const [reservation, setreservation] = useState([])
-    const [id_mecanico, setidmecanico] = useState('')
+    const [id_mecan, setidmecan] = useState('')
     const [id_service, setidservice] = useState('')
     const [selectdate, setselectdate] = useState('')
     const [booking_hour, setbooking_hour] = useState('');
@@ -28,7 +28,7 @@ export const ReservationProvider = ({ children }) => {
     const [msgnotificationcalendary, setmsgnotificationcalendary] = useState('')
     const waiting = (ms) => new Promise(resolve => setTimeout(resolve, ms))
     let iduser = user.id_user
-    const booking_date = selectdate.toString().split('T')[0]
+    // const booking_date = selectdate.toString().split('T')[0]
     async function Loadrese() {
         setloandcalendary(true)
         try {
@@ -45,13 +45,23 @@ export const ReservationProvider = ({ children }) => {
     }
     async function CheckhoursAvaileble() {
         const dadosapi = {
-            id_mecanico: 1,
-            booking_date: '2026-02-06'
+            id_mecanico: id_selectmecanico,
+            booking_date: selectdate
         }
         try {
             const res = await api.post('/appointements/check', dadosapi)
-            console.log(res.data)
+            const horariospadrao = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00']
+            const horariosocupados = res.data
             sethorariosdisponiveis(res.data)
+            const validarhorariosdinamicos = ()=>{
+                const lista = horariospadrao.map(hora =>{
+                    return{
+                        hora:hora,
+                        disponivel:!horariosocupados.includes(hora)
+                    }
+                })
+                console.log(lista)
+            }
         } catch (error) {
             console.log(error.status)
         }
@@ -67,7 +77,7 @@ export const ReservationProvider = ({ children }) => {
         if (booking_date && booking_hour != "") {
             setloand(true)
             try {
-                const res = await api.post('/appointements', dadosparaapi)
+                const res = await api.get('/appointements', dadosparaapi)
                 await waiting(1500)
                 setloand(false)
                 setstatusapi(res.status)
@@ -101,6 +111,6 @@ export const ReservationProvider = ({ children }) => {
         }
     }
     return (
-        <ReservationContext.Provider value={{ id_mecanico, setidmecanico,loadinghours,horariosdisponiveis, id_service, setidservice, reservation, loand, loandcalendary, updatescreen, setloandcalendary, statusapi, setactivenotification, activenotification, activenotificationcalendary, setactivenotificationcalendary, msgnotification, setmsgnotification, msgnotificationcalendary, selectdate, setselectdate, booking_hour, setbooking_hour, CheckhoursAvaileble, Createappointment, Loadrese, DeleteReservar }}>{children}</ReservationContext.Provider>
+        <ReservationContext.Provider value={{ id_mecan, setidmecan, loadinghours, horariosdisponiveis, id_service, setidservice, reservation, loand, loandcalendary, updatescreen, setloandcalendary, statusapi, setactivenotification, activenotification, activenotificationcalendary, setactivenotificationcalendary, msgnotification, setmsgnotification, msgnotificationcalendary, selectdate, setselectdate, booking_hour, setbooking_hour, CheckhoursAvaileble, Createappointment, Loadrese, DeleteReservar }}>{children}</ReservationContext.Provider>
     )
 }
