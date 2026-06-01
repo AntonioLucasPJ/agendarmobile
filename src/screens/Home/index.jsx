@@ -1,16 +1,30 @@
 import { FlatList, Image, Text, View, ScrollView, SafeAreaView } from "react-native";
+import { useContext, useEffect, useState } from "react";
 import icon from '../../constants/icon.js'
 import { styles } from "./index.js";
 import { Mecanico } from "../../components/mecanico/index.jsx";
 import api from "../../constants/api.js";
 
-//Acess UseCotextAPI
+//Acess UseCotext
+
 import { AuthContext } from "../../contexts/auth.js";
-import { useContext, useEffect, useState } from "react";
+import { MecanicoContext } from "../../contexts/mecanico.jsx";
 export function TelaHome(props) {
     const { user } = useContext(AuthContext)
     const [mecanicos, setmecanicos] = useState('')
+    const {
+        id_selectmecanico,setidselectmecanico,
+        name_selectmecanico,setname_selectmecanico,
+        specialty_selectmecanico,setspecialty_selectmecanico,
+        icon_selectmecanico,seticon_selectmecanico,
+        avatar_selectmecanico,setavatar_selectmecanico,
+    } = useContext(MecanicoContext)
     function ClickMecanico(id_mecanico, name, specialty, icon, avatar) {
+        setidselectmecanico(id_mecanico)
+        setname_selectmecanico(name)
+        setspecialty_selectmecanico(specialty)
+        seticon_selectmecanico(icon)
+        setavatar_selectmecanico(avatar)
         props.navigation.navigate("services", {
             id_mecanico, name, specialty, icon,avatar
         })

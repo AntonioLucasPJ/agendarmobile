@@ -4,6 +4,7 @@ import { color } from "../../constants/theme";
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding:1,
         backgroundColor: '#e2e8f0', // Fundo levemente acinzentado do mockup
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },

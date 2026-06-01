@@ -2,72 +2,105 @@ import { createContext, useContext, useState } from "react";
 import api from "../constants/api";
 import { AuthContext } from "./auth";
 import { useNavigation } from "@react-navigation/native";
+import { MecanicoContext } from "./mecanico";
 export const ReservationContext = createContext({})
 export const ReservationProvider = ({ children }) => {
+    const {
+        id_selectmecanico, setid_selectmecanico,
+        service_selectmecanico
+    } = useContext(MecanicoContext)
     const navigation = useNavigation()
     const { user } = useContext(AuthContext)
     const [loand, setloand] = useState(false)
-    const [reservation, setreservation] = useState('')
-    const [id_mecanico,setidmecanico] = useState('')
-    const [id_service,setidservice] = useState('')
+    const [horariosdisponiveis, sethorariosdisponiveis] = useState([''])
+    const [loadinghours, setloadhours] = useState(false)
+    const [updatescreen, setupdatescreen] = useState(false)
+    const [loandcalendary, setloandcalendary] = useState(false)
+    const [reservation, setreservation] = useState([])
+    const [id_mecanico, setidmecanico] = useState('')
+    const [id_service, setidservice] = useState('')
     const [selectdate, setselectdate] = useState('')
-    const [booking_hour, setbooking_hour] = useState('10:00');
-    const [statusapi,setstatusapi] = useState('')
+    const [booking_hour, setbooking_hour] = useState('');
+    const [statusapi, setstatusapi] = useState('')
     const [activenotification, setactivenotification] = useState(false)
     const [msgnotification, setmsgnotification] = useState('')
+    const [activenotificationcalendary, setactivenotificationcalendary] = useState(false)
+    const [msgnotificationcalendary, setmsgnotificationcalendary] = useState('')
     const waiting = (ms) => new Promise(resolve => setTimeout(resolve, ms))
     let iduser = user.id_user
     const booking_date = selectdate.toString().split('T')[0]
     async function Loadrese() {
-        setloand(true)
+        setloandcalendary(true)
         try {
-            const res = await api.get(`/appointements`)
             await waiting(1500)
-            setloand(false)
+            const res = await api.get(`/appointements`)
             setreservation(res.data)
+            setloandcalendary(false)
+
         } catch (error) {
             await waiting(1500)
-            setloand(false)
+            setloandcalendary(false)
             console.log(error)
         }
     }
+    async function CheckhoursAvaileble() {
+        const dadosapi = {
+            id_mecanico: 1,
+            booking_date: '2026-02-06'
+        }
+        try {
+            const res = await api.post('/appointements/check', dadosapi)
+            console.log(res.data)
+            sethorariosdisponiveis(res.data)
+        } catch (error) {
+            console.log(error.status)
+        }
+    }
     async function Createappointment() {
+        const dadosparaapi = {
+            id_mecanico: id_selectmecanico,
+            id_service: service_selectmecanico,
+            id_user: user.id_user,
+            booking_date: booking_date,
+            booking_hour: booking_hour
+        }
         if (booking_date && booking_hour != "") {
             setloand(true)
             try {
-                const res = await api.post('/appointements', {
-                    id_mecanico:id_mecanico,
-                    id_service:id_service,
-                    id_user: iduser,
-                    booking_date,
-                    booking_hour
-                })
+                const res = await api.post('/appointements', dadosparaapi)
                 await waiting(1500)
                 setloand(false)
                 setstatusapi(res.status)
                 setmsgnotification(res.data.message)
                 setactivenotification(true)
-                setTimeout(() => {
-                    navigation.navigate('main')
-                }, 3000)
             } catch (error) {
                 await waiting(1500)
                 console.log(error)
                 setloand(false)
                 setactivenotification(true)
-                console.log(error.respose.data)
                 setmsgnotification(error.respose.data)
-                console.log(error)
-
             }
         } else {
-
             Alert.alert('Selecione a Data')
         }
-
-
+    }
+    async function DeleteReservar(id_appointment) {
+        setloandcalendary(true)
+        try {
+            const res = await api.delete(`/appointments/delete/${id_appointment}`)
+            await waiting(1500)
+            setstatusapi(res.status)
+            setloandcalendary(false)
+            setmsgnotificationcalendary(res.data)
+            setactivenotificationcalendary(true)
+            setupdatescreen(true)
+        } catch (error) {
+            await waiting(1500)
+            setloandcalendary(false)
+            console.log(error)
+        }
     }
     return (
-        <ReservationContext.Provider value={{id_mecanico,setidmecanico,id_service,setidservice, reservation, loand,statusapi, setactivenotification, activenotification,msgnotification,setmsgnotification, selectdate, setselectdate, booking_hour, setbooking_hour, Createappointment, Loadrese }}>{children}</ReservationContext.Provider>
+        <ReservationContext.Provider value={{ id_mecanico, setidmecanico,loadinghours,horariosdisponiveis, id_service, setidservice, reservation, loand, loandcalendary, updatescreen, setloandcalendary, statusapi, setactivenotification, activenotification, activenotificationcalendary, setactivenotificationcalendary, msgnotification, setmsgnotification, msgnotificationcalendary, selectdate, setselectdate, booking_hour, setbooking_hour, CheckhoursAvaileble, Createappointment, Loadrese, DeleteReservar }}>{children}</ReservationContext.Provider>
     )
 }

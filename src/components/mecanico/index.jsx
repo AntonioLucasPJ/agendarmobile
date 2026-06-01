@@ -34,7 +34,7 @@ export function Mecanico(props) {
                 <View style={styles.expBadge}>
                     <Text style={styles.expText}>{props.experiencia || '15+anos'}</Text>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => props.onPress(props.id_mecanico,props.name, props.specialty, props.icon,props.avatar)}>
+                <TouchableOpacity style={styles.button} onPress={() => props.onPress(props.id_mecanico,props.name, props.especiality, props.icon,props.avatar)}>
                     <Text style={styles.buttonText}>Selecionar</Text>
                 </TouchableOpacity>
             </View>

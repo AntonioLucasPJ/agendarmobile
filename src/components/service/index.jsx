@@ -7,6 +7,12 @@ import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { Icon } from "lucide-react-native";
 import { useEffect } from "react";
 export function MeetService(props) {
+    const formatarvalor = (valor) =>{
+        return new Intl.NumberFormat('pt-BR',{
+            style:'currency',
+            currency:'BRL'
+        }).format(valor)
+    }
     const renderServiceIcon = (IconName) => {
         if (IconName === 'engine') {
             return(
@@ -25,17 +31,17 @@ export function MeetService(props) {
                 </View>
                 <View style={styles.serviceTextContainer}>
                     <Text style={styles.serviceName}>{props.service}</Text>
-                    <Text style={styles.serviceDescription}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime, ab, iusto, molestiae minima rerum laudantium aut at nihil natus dignissimos ipsam! Natus inventore asperiores nemo quam perspiciatis et reiciendis doloremque?</Text>
+                    <Text style={styles.serviceDescription}>{props.descripition}</Text>
                 </View>
             </View>
             <View style={styles.serviceBottomRow}>
                 <View style={styles.priceBadge}>
                     <Text style={styles.priceText}>
-                        R$ {props.price}
+                        {formatarvalor(props.price)}
                     </Text>
                 </View>
                 <TouchableOpacity
-                    onPress={() => props.onPress(props.id_service)}
+                    onPress={() => props.onPress(props.id_service,props.id_icon,props.service,props.descripition,props.price)}
                 >
                     <LinearGradient
                         colors={['#1e40af', '#ea580c']}

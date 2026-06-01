@@ -1,11 +1,15 @@
-import { FlatList, Image, Text, View, SafeAreaView, TouchableOpacity } from "react-native";
+import { FlatList, Image, Text, View, TouchableOpacity } from "react-native";
 import icon from '../../constants/icon.js'
+import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./index.js";
 import { MeetService } from "../../components/service/index.jsx";
 import api from "../../constants/api.js";
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useContext, useEffect, useState } from "react";
+
 import { AuthContext } from "../../contexts/auth.js";
+import { MecanicoContext } from "../../contexts/mecanico.jsx";
+import { ServiceContext } from "../../contexts/service.jsx";
 export function Service(props) {
     const id_mecan = props.route.params.id_mecanico;
     const name = props.route.params?.name || { name: 'Não Identificado' }
@@ -14,7 +18,8 @@ export function Service(props) {
     const url = props.route.params.avatar
     const [msg, setmsg] = useState('')
     const [servicesmecanicos, setservicesmecanicos] = useState('')
-
+    const {setservice_selectmecanico} = useContext(MecanicoContext)
+    const {setid_service,setserviceicon,setservicename,setservicedescription,setserviceprice} = useContext(ServiceContext)
     async function LoadServices() {
         try {
             const res = await api.get(`/mecanicos/${id_mecan}/services`)
@@ -23,15 +28,21 @@ export function Service(props) {
             setmsg(error.response.data.message)
         }
     }
-    function ClickS(id_service) {
+    function ClickS(id_service,id_icon,service,description,price) {
+        setservice_selectmecanico(id_service)
+        setid_service(id_service)
+        setserviceicon(id_icon)
+        setservicename(service)
+        setservicedescription(description)
+        setserviceprice(price)
         props.navigation.navigate("Shedule", {
-            id_mecan,
-            id_service
+            id_pmecanico:id_mecan,
+            id_pservice:id_service
         })
     }
     useEffect(() => {
         LoadServices()
-        console.log(specialty)
+
     }, [])
     return (
         <SafeAreaView style={styles.container}>
@@ -52,7 +63,7 @@ export function Service(props) {
                             </View>
                         </View>
                     </View>
-                    <Text style={styles.mecanicoTitle}>{name}</Text>
+                    {/* <Text style={styles.mecanicoTitle}>{name}</Text> */}
                     <Text style={styles.mecanicoSpecialty}>{specialty}</Text>
                     <View style={styles.mecanicoFooterRow}>
                         <View style={styles.miniIcons}>

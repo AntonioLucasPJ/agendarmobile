@@ -22,9 +22,9 @@ export const LoginProvider = ({ children }) => {
             })
             if (response.data) {
                 api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
-                await awaiting(2500)
                 setuser(response.data)
                 setstatusapi(response.status)
+                await awaiting(2500)
                 setloading(false)
             }
         } catch (error) {

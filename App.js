@@ -8,19 +8,26 @@ import { AuthProvider } from './src/contexts/auth.js';
 import { SingupProvider } from './src/contexts/user.jsx';
 import { LoginProvider } from './src/contexts/login.jsx';
 import { ReservationProvider } from './src/contexts/reservation.jsx';
+import { MecanicoProvider } from './src/contexts/mecanico.jsx';
+import { ServiceProvider } from './src/contexts/service.jsx';
+
 export default function App() {
   return (
     <NavigationContainer>
       <AuthProvider>
-        <ReservationProvider>
-          <LoginProvider>
-            <SingupProvider>
-              <Routes></Routes>
-            </SingupProvider>
-          </LoginProvider>
-        </ReservationProvider>
+        <MecanicoProvider>
+          <ServiceProvider>
+            <ReservationProvider>
+              <LoginProvider>
+                <SingupProvider>
+                  <Routes></Routes>
+                </SingupProvider>
+              </LoginProvider>
+            </ReservationProvider>
+          </ServiceProvider>
+        </MecanicoProvider>
       </AuthProvider>
-    </NavigationContainer>
+    </NavigationContainer >
   )
 }
 

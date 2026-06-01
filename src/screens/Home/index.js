@@ -4,8 +4,7 @@ import { color } from "../../constants/theme";
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 1,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#F1F5F9'
     },
     sectionTitle: {
         fontSize: 16,
