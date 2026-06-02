@@ -107,7 +107,8 @@ export const styles = StyleSheet.create({
     },
     hourTextActive: {
         color: '#cc4b4b',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color:'#ffffff'
     },
     hourTextDisabled: {
         color: '#94a3b8',

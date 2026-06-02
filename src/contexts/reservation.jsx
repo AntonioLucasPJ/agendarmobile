@@ -28,7 +28,7 @@ export const ReservationProvider = ({ children }) => {
     const [msgnotificationcalendary, setmsgnotificationcalendary] = useState('')
     const waiting = (ms) => new Promise(resolve => setTimeout(resolve, ms))
     let iduser = user.id_user
-    // const booking_date = selectdate.toString().split('T')[0]
+    const booking_date = selectdate.toString().split('T')[0]
     async function Loadrese() {
         setloandcalendary(true)
         try {
@@ -43,27 +43,26 @@ export const ReservationProvider = ({ children }) => {
             console.log(error)
         }
     }
-    async function CheckhoursAvaileble() {
+    async function CheckhoursAvaileble(datestring) {
         const dadosapi = {
             id_mecanico: id_selectmecanico,
-            booking_date: selectdate
+            booking_date: datestring
         }
+        console.log(dadosapi)
+        setloadhours(true)
         try {
             const res = await api.post('/appointements/check', dadosapi)
             const horariospadrao = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00']
-            const horariosocupados = res.data
-            sethorariosdisponiveis(res.data)
-            const validarhorariosdinamicos = ()=>{
-                const lista = horariospadrao.map(hora =>{
-                    return{
-                        hora:hora,
-                        disponivel:!horariosocupados.includes(hora)
-                    }
-                })
-                console.log(lista)
-            }
+            const infor_horas = res.data
+            const apenas_horas_ocupadas = infor_horas.map(item => item.booking_hour)
+            const apenasdisponivel =  horariospadrao.filter(
+                hora => !apenas_horas_ocupadas.includes(hora)
+            )
+            sethorariosdisponiveis(apenasdisponivel)
         } catch (error) {
             console.log(error.status)
+        } finally{
+            setloadhours(false)
         }
     }
     async function Createappointment() {

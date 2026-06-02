@@ -37,16 +37,6 @@ export function Schedule() {
             <MaterialCommunityIcons name='alert'></MaterialCommunityIcons>
         )
     }
-    const horariosdisponiveis = [
-        { hora: "08:00", disponivel: true },
-        { hora: "09:00", disponivel: false },
-        { hora: "10:00", disponivel: true },
-        { hora: "11:00", disponivel: false },
-        { hora: "14:00", disponivel: true },
-        { hora: "15:00", disponivel: true },
-        { hora: "16:00", disponivel: true },
-        { hora: "17:00", disponivel: true }
-    ]
     const formatarvalor = (valor) => {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
@@ -63,6 +53,7 @@ export function Schedule() {
         activenotification, setactivenotification,
         setmsgnotification, msgnotification,
         loadinghours,
+        horariosdisponiveis,
         Createappointment,
         CheckhoursAvaileble
     } = useContext(ReservationContext)
@@ -76,6 +67,11 @@ export function Schedule() {
         setactivenotification(false)
         navigation.navigate('main')
     }
+    useEffect(() => {
+        if(selectdate !== ''){
+            CheckhoursAvaileble(selectdate)
+        }
+    }, [selectdate])
     //Calendario 
     //https://github.com/wix/react-native-calendars.git
 
@@ -109,7 +105,8 @@ export function Schedule() {
                         minDate={today_date}
                         onDayPress={day => {
                             setselectdate(day.dateString)
-                            CheckhoursAvaileble()
+                            setbooking_hour('')
+
                         }}
                         markedDates={{
                             [selectdate]: { selected: true, selectedColor: '#e08519' }
@@ -138,24 +135,23 @@ export function Schedule() {
                     </View>
                 ) : (
                     <View style={styles.hoursGrid}>
-                        {horariosdisponiveis.map((item) => {
-                            const isSelected = horariosdisponiveis === item.hora;
+                        {horariosdisponiveis.map((hora) => {
+                            const isSelected = booking_hour?.trim() === hora.trim();
                             return (
                                 <TouchableOpacity
-                                    key={item.hora}
-                                    disabled={!item.hora}
+                                    key={hora}
+                                    disabled={!hora}
                                     style={[
                                         styles.hourButton,
                                         isSelected && styles.hourButtonActive,
-                                        !item.disponivel && styles.hourButtonDisabled
+
                                     ]}
-                                    onPress={() => setbooking_hour(item.hora)}>
+                                    onPress={() => setbooking_hour(hora)}>
                                     <Text style={[
                                         styles.hourText,
                                         isSelected && styles.hourTextActive,
-                                        !item.disponivel && styles.hourTextDisabled
                                     ]}>
-                                        {item.hora}
+                                        {hora}
                                     </Text>
                                 </TouchableOpacity>
                             );
