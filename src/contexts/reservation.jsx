@@ -48,9 +48,9 @@ export const ReservationProvider = ({ children }) => {
             id_mecanico: id_selectmecanico,
             booking_date: datestring
         }
-        console.log(dadosapi)
         setloadhours(true)
         try {
+            await waiting(1700)
             const res = await api.post('/appointements/check', dadosapi)
             const horariospadrao = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00']
             const infor_horas = res.data

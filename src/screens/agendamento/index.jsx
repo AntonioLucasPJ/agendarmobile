@@ -1,4 +1,4 @@
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, Text, TouchableOpacity,ActivityIndicator, View } from "react-native";
 import { styles } from './index.js'
 import { Button } from "../../components/button/button.jsx";
 import { Calendar, LocaleConfig } from "react-native-calendars";
@@ -14,7 +14,6 @@ import { ModalCustom } from "../../components/modalcustom/index.jsx";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { FaS } from "react-icons/fa6";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ActivityIndicator } from "react-native-web";
 import { ServiceContext } from "../../contexts/service.jsx";
 import { Icon } from "lucide-react-native";
 LocaleConfig.locales["pt-br"] = ptBR
@@ -106,7 +105,6 @@ export function Schedule() {
                         onDayPress={day => {
                             setselectdate(day.dateString)
                             setbooking_hour('')
-
                         }}
                         markedDates={{
                             [selectdate]: { selected: true, selectedColor: '#e08519' }
