@@ -38,6 +38,22 @@ export const styles = StyleSheet.create({
         marginRight: 10,
         tintColor: '#666',
     },
+    emptyContainer: {
+        backgroundColor: '#FFF5F5', // Fundo vermelho bem claro para indicar aviso/atenção
+        borderWidth: 1,
+        borderColor: '#FED7D7',
+        borderRadius: 8,
+        padding: 16,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    emptyText: {
+        fontSize: 14,
+        fontWeight:'bold',
+        color: '#C53030', // Texto em tom vermelho escuro para dar contraste e legibilidade
+        fontWeight: '500',
+        textAlign: 'center'
+    },
     inputIconDisable: {
         width: 30,
         height: 30,

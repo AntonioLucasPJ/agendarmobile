@@ -1,4 +1,4 @@
-import { Alert, ScrollView, Text, TouchableOpacity,ActivityIndicator, View } from "react-native";
+import { Alert, ScrollView, Text, TouchableOpacity, ActivityIndicator, View } from "react-native";
 import { styles } from './index.js'
 import { Button } from "../../components/button/button.jsx";
 import { Calendar, LocaleConfig } from "react-native-calendars";
@@ -67,7 +67,7 @@ export function Schedule() {
         navigation.navigate('main')
     }
     useEffect(() => {
-        if(selectdate !== ''){
+        if (selectdate !== '') {
             CheckhoursAvaileble(selectdate)
         }
     }, [selectdate])
@@ -133,26 +133,31 @@ export function Schedule() {
                     </View>
                 ) : (
                     <View style={styles.hoursGrid}>
-                        {horariosdisponiveis.map((hora) => {
+                        {horariosdisponiveis.length === 0 ?
+                            <View style={styles.emptyContainer}>
+                                <Text style={styles.emptyText}>Não existem horários disponíveis para essa data.</Text>
+                            </View>                        
+                        :
+                        horariosdisponiveis.map((hora) => {
                             const isSelected = booking_hour?.trim() === hora.trim();
-                            return (
-                                <TouchableOpacity
-                                    key={hora}
-                                    disabled={!hora}
-                                    style={[
-                                        styles.hourButton,
-                                        isSelected && styles.hourButtonActive,
+                        return (
+                        <TouchableOpacity
+                            key={hora}
+                            disabled={!hora}
+                            style={[
+                                styles.hourButton,
+                                isSelected && styles.hourButtonActive,
 
-                                    ]}
-                                    onPress={() => setbooking_hour(hora)}>
-                                    <Text style={[
-                                        styles.hourText,
-                                        isSelected && styles.hourTextActive,
-                                    ]}>
-                                        {hora}
-                                    </Text>
-                                </TouchableOpacity>
-                            );
+                            ]}
+                            onPress={() => setbooking_hour(hora)}>
+                            <Text style={[
+                                styles.hourText,
+                                isSelected && styles.hourTextActive,
+                            ]}>
+                                {hora}
+                            </Text>
+                        </TouchableOpacity>
+                        );
                         })}
                     </View>
                 )}

@@ -76,7 +76,7 @@ export const ReservationProvider = ({ children }) => {
         if (booking_date && booking_hour != "") {
             setloand(true)
             try {
-                const res = await api.get('/appointements', dadosparaapi)
+                const res = await api.post('/appointements', dadosparaapi)
                 await waiting(1500)
                 setloand(false)
                 setstatusapi(res.status)
