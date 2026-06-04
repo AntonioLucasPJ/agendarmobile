@@ -19,8 +19,16 @@ function RotasPrivadas() {
                 name="vehicle"
                 component={TelaCadastroVeiculos}
                 options={{
-                    headerShown: false
-                }}></Stack.Screen>
+                    headerTitle: "SingupVehicle",
+                    headerTitleAlign: "center",
+                    headerShadowVisible: false,
+                    headerTintColor: color.white,
+                    headerStyle: {
+                        backgroundColor: color.blue
+                    }
+                    // headerShown:false
+                }}
+            ></Stack.Screen>
             <Stack.Screen
                 name="services"
                 component={Service}

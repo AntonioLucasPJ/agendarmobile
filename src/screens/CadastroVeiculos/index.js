@@ -63,21 +63,32 @@ export const styles = StyleSheet.create({
     // Listagem horizontal de Marcas
     horizontalScroll: {
         marginBottom: 24,
-        flexDirection: 'row'
+
     },
     brandCard: {
         backgroundColor: '#FFFFFF',
         borderWidth: 1,
         borderColor: '#E2E8F0',
         borderRadius: 12,
-        paddingVertical: 16,
-        paddingHorizontal: 20,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
         alignItems: 'center',
-        marginRight: 12,
-        minWidth: 105,
-        gap: 8,
+        justifyContent: 'center', 
+        marginRight: 12, 
+        width: 105,
+        height: 95,
+        gap: 6, 
         elevation: 1
     },
+    brandLogo: {
+        width: 80,
+        height: 80,
+
+    }, // tintColor aplica filtro cinza nas logos
+    brandLogoSelected: {
+        tintColor: '#FFFFFF',
+        backgroundColor: '#000'
+    }, // Fica branca quando selecionada
     cardSelected: {
         backgroundColor: '#3182CE',
         borderColor: '#3182CE'
@@ -88,7 +99,7 @@ export const styles = StyleSheet.create({
         fontWeight: '600'
     },
     cardTextSelected: {
-        color: '#FFFFFF'
+        color: '#ffffff'
     },
 
     // Grid de Modelos
