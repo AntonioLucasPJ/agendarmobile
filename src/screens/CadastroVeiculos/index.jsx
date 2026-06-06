@@ -2,8 +2,12 @@ import { styles } from './index.js'
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, TextInput, Image } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { MaterialCommunityIcons, FontAwesome6, Ionicons } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import api from '../../constants/api.js';
+import { LoginContext } from '../../contexts/login.jsx';
+import { AuthContext } from '../../contexts/auth.js';
+import Loading from '../../components/loading/index.jsx';
+import { ModalCustom } from '../../components/modalcustom/index.jsx';
 export function TelaCadastroVeiculos() {
     const [brands, setbrands] = useState([])
     const [models, setmodels] = useState([])
@@ -13,7 +17,32 @@ export function TelaCadastroVeiculos() {
     const [color, setcolor] = useState('')
     const [loading, setloading] = useState(false)
     const [loadinModels, setloadinModels] = useState(true)
+    const [statusapi,setstatusapi] = useState('')
+    const [activenotification,setactivenotification] = useState(false)
+    const [msgnotification,setmsgnotification] = useState('')
     const waiting = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+    const { user } = useContext(AuthContext)
+    const aplicarMascarPlaca = (texto) => {
+        let valor = texto.replace(/[^a-zA-Z0-9]/g).toUpperCase()
+        if (valor.length > 3 && !isNaN(valor[3])) {
+            valor = valor.replace(/^([A-Z{3}) ([0-9]{4})$/, "$1-$2")
+        } else if (valor.length > 3) {
+            valor = valor.substring(0, 7)
+        }
+        return valor.substring(0, 8)
+    }
+    const validarplacabrasileira = (placa) => {
+        const placalimpa = placa.replace('-', '').toUpperCase()
+        const regexAntiga = /^[A-Z]{3}[0-9]{4}$/;
+        const regexMercosul = /^[A-Z]{3}[0-9]{1}[A-Z]{1}[0-9]{2}$/;
+        return regexAntiga.test(placalimpa) || regexMercosul.test(placalimpa)
+    }
+    const isplacavalid = validarplacabrasileira(plate)
+
+    const formvalid = selectedBrand !== '' &&
+        selectedModel !== '' && 
+        isplacavalid &&
+        color !== ''
 
     useEffect(() => {
         async function LoadCars() {
@@ -28,9 +57,6 @@ export function TelaCadastroVeiculos() {
         LoadCars()
 
     }, [])
-    useEffect(() => {
-        console.log('Marca Selecionada:', selectedModel)
-    }, [selectedModel])
     useEffect(() => {
         if (selectedBrand) {
             async function LoadModels() {
@@ -49,14 +75,39 @@ export function TelaCadastroVeiculos() {
             LoadModels()
         }
     }, [selectedBrand])
-    useEffect(() => {
-        async function SingupVehicle() {
-            const res = await api.post
+    async function CreateSingVehicle() {
+        const dadosapi = {
+            id_user: user.id_user,
+            model_id: selectedModel,
+            license_plate: plate,
+            color: color
         }
-    })
+        try {
+            setloading(true)
+            await waiting(2000)
+            const res = await api.post('/vehicle/singupvehicle', dadosapi)
+            setstatusapi(res.status)
+            msgnotification(res.data)
+            setTimeout(()=>{
+                activenotification(!activenotification)
+            },[1500])
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setloading(false)
+        }
+    }
     return (
         <SafeAreaView style={styles.safeArea}>
-            <ScrollView style={styles.container} contentContainerStyle={styles.container}>
+            {loading ?
+                <Loading visible={loading}></Loading>
+                : ''
+            }
+            {activenotification?
+                <ModalCustom statusapi={statusapi} msgmodal={msgnotification}></ModalCustom>    
+            :''
+            }
+            <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
                 <View style={styles.bannerContainer}>
                     <MaterialCommunityIcons name='car-cog' size={50} color='#3182C3'></MaterialCommunityIcons>
                     <Text style={styles.bannerText}>Adicionar os dados do seu Carro</Text>
@@ -69,21 +120,26 @@ export function TelaCadastroVeiculos() {
                     snapToAlignment='start'
                     snapToInterval={117}
                     decelerationRate='fast'>
-                    {brands.map(brand => (
-                        <TouchableOpacity
-                            key={brand.id}
-                            style={[styles.brandCard, selectedBrand === brand.id && styles.cardSelected]}
-                            onPress={() => setselectedBrand(brand.id)}>
-                            <Image
-                                source={{ uri: brand.imagem_url }}
-                                style={[styles.brandLogo, selectedBrand === brand.id && styles.brandLogoSelected]}
-                                resizeMode='contain'
-                            ></Image>
-                            <Text style={[styles.cardText, selectedBrand === String(brand.id) && styles.cardTextSelected]}>
-                                {brand.name}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
+                    {brands.map(brand => {
+                        const isSelectBand = selectedBrand === brand.id;
+                        return (
+                            <TouchableOpacity
+                                key={brand.id}
+                                style={[styles.brandCard]}
+                                onPress={() => setselectedBrand(brand.id)}>
+                                <View style={[styles.logoCircle, isSelectBand && styles.logoCircleSelected]}>
+                                    <Image
+                                        source={{ uri: brand.imagem_url }}
+                                        style={[styles.brandLogo]}
+                                        resizeMode='contain'
+                                    ></Image>
+                                </View>
+                                <Text style={[styles.cardText, isSelectBand && styles.cardTextSelected]}>
+                                    {brand.name}
+                                </Text>
+                            </TouchableOpacity>
+                        )
+                    })}
                 </ScrollView>
                 {selectedBrand && (
                     <View style={styles.animatedSection}>
@@ -100,7 +156,7 @@ export function TelaCadastroVeiculos() {
                                         style={[styles.modelChip, selectedModel === model.id && styles.modelChipSelected]}
                                         onPress={() => setselectedModel(model.id)}
                                     >
-                                        <Text style={[styles.modelChip, selectedModel === model && styles.modelChipText]}>
+                                        <Text style={[styles.modelChipText, selectedModel === model.id && styles.modelChipTextSelected]}>
                                             {model.name}
                                         </Text>
                                     </TouchableOpacity>
@@ -109,37 +165,40 @@ export function TelaCadastroVeiculos() {
                         )}
                     </View>
                 )}
+
+                <View style={styles.inputWrapper}>
+                    <MaterialCommunityIcons
+                        name='card-bulleted-off-outline'
+                        size={20}
+                        color='#A0AEC0'
+                        style={styles.inputIcon}></MaterialCommunityIcons>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Placa do Veiculo'
+                        placeholderTextColor='#A0AEC0'
+                        value={plate}
+                        maxLength={8}
+                        autoCapitalize='characters'
+                        onChangeText={(text)=> setplate(aplicarMascarPlaca(text))}></TextInput>
+                </View>
+                <View style={styles.inputWrapper}>
+                    <MaterialCommunityIcons
+                        name='palette-outline'
+                        size={20}
+                        color='#A0AEC0'
+                        style={styles.inputIcon}></MaterialCommunityIcons>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Cor do Veiculo (Ex:Preto)'
+                        placeholderTextColor='#A0AEC0'
+                        value={color}
+                        onChangeText={setcolor}></TextInput>
+                </View>
             </ScrollView>
-            <View style={styles.inputWrapper}>
-                <MaterialCommunityIcons
-                    name='card-bulleted-off-outline'
-                    size={20}
-                    color='#A0AEC0'
-                    style={styles.inputIcon}></MaterialCommunityIcons>
-                <TextInput
-                    style={styles.input}
-                    placeholder='Placa do Veiculo'
-                    placeholderTextColor='#A0AEC0'
-                    value={color}
-                    onChangeText={setplate}></TextInput>
-            </View>
-            <View style={styles.inputWrapper}>
-                <MaterialCommunityIcons
-                    name='palette-outline'
-                    size={20}
-                    color='#A0AEC0'
-                    style={styles.inputIcon}></MaterialCommunityIcons>
-                <TextInput
-                    style={styles.input}
-                    placeholder='Cor do Veiculo (Ex:Preto)'
-                    placeholderTextColor='#A0AEC0'
-                    value={color}
-                    onChangeText={setcolor}></TextInput>
-            </View>
             <TouchableOpacity
-                style={[styles.saveButton, loading && styles.saveButtonDisabled]}
-                disabled={loading}
-                onPress={() => SingupVehicle }
+                style={[styles.saveButton, !formvalid && styles.saveButtonDisabled]}
+                disabled={!formvalid}
+                onPress={() => CreateSingVehicle()}
             >
                 {loading ? (
                     <ActivityIndicator color='#FFFFFF'></ActivityIndicator>

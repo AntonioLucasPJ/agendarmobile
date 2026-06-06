@@ -30,7 +30,10 @@ export const styles = StyleSheet.create({
     content: {
         padding: 20
     },
-
+    scrollContent: {
+        padding: 16,
+        paddingBottom: 40, // Dá espaço extra na rolagem para o botão não cobrir os inputs
+    },
     // Banner explicativo
     bannerContainer: {
         alignItems: 'center',
@@ -66,40 +69,47 @@ export const styles = StyleSheet.create({
 
     },
     brandCard: {
+        width: 95,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 12,       // Espaçamento entre um card e outro na horizontal
+        paddingVertical: 4,
+    },
+    logoCircle: {
+        width: 70,
+        height: 70,
+        borderRadius: 35,      // Metade de 70 = Círculo Perfeito!
         backgroundColor: '#FFFFFF',
         borderWidth: 1,
         borderColor: '#E2E8F0',
-        borderRadius: 12,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
         alignItems: 'center',
-        justifyContent: 'center', 
-        marginRight: 12, 
-        width: 105,
-        height: 95,
-        gap: 6, 
-        elevation: 1
+        justifyContent: 'center',
+        padding: 10,           // Espaço interno para a logo não colar na borda do círculo
+        overflow: 'hidden',    // Corta o fundo branco quadrado da imagem para não sair do círculo
+    },
+
+    // Quando a marca for selecionada, a borda do círculo fica azul (ou o fundo, se preferir)
+    logoCircleSelected: {
+        borderColor: '#3182CE',
+        borderWidth: 2,
+        // Se quiser que o fundo do círculo fique azul inteiro, ative a linha abaixo:
+        // backgroundColor: '#EBF8FF', 
     },
     brandLogo: {
-        width: 80,
-        height: 80,
+        width: '100%',
+        height:100
 
     }, // tintColor aplica filtro cinza nas logos
-    brandLogoSelected: {
-        tintColor: '#FFFFFF',
-        backgroundColor: '#000'
-    }, // Fica branca quando selecionada
-    cardSelected: {
-        backgroundColor: '#3182CE',
-        borderColor: '#3182CE'
-    },
     cardText: {
         fontSize: 14,
         color: '#4A5568',
-        fontWeight: '600'
+        fontWeight: '600',
+        textAlign:'center',
+        marginTop:8
     },
     cardTextSelected: {
-        color: '#ffffff'
+        color: '#3182CE',
+        fontWeight:'700'
     },
 
     // Grid de Modelos
