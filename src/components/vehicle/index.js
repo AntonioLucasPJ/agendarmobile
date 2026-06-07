@@ -1,43 +1,6 @@
 import { StyleSheet } from "react-native";
-import { color } from "../../constants/theme";
 
 export const styles = StyleSheet.create({
-    safearea: {
-        flex: 1,
-        backgroundColor: '#F1F5F9'
-    },
-    headerContainer: {
-        paddingHorizontal: 16,
-        paddingTop: 12,
-        backgroundColor: '#F8FAFC', // Fundo de tela levemente acinzentado (estilo iOS)
-    },
-    welcomeRow: {
-        marginBottom: 20,
-    },
-    welcomeText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#0F172A',
-    },
-    subWelcomeText: {
-        fontSize: 14,
-        color: '#64748B',
-        marginTop: 2,
-    },
-    sectionTitle: {
-        fontSize: 16,
-        fontWeight: '700',
-        color: '#334155',
-        letterSpacing: 0.3,
-        marginBottom: 12,
-        textTransform: 'uppercase',
-    },
-    carouselContainer: {
-        paddingRight: 16,
-        paddingVertical: 4,
-    },
-
-    // 🔥 O DESIGN DO CARTÃO DE CARRO (ESTILO BANCO DIGITAL)
     vehicleCardHorizontal: {
         width: 300,
         backgroundColor: '#0F172A', // Slate 900 (Fundo escuro premium ultra moderno)
@@ -90,7 +53,7 @@ export const styles = StyleSheet.create({
         color: '#FFFFFF',
         marginBottom: 6,
     },
-
+    
     // 🔥 TAG FORMATO PLACA MERCOSUL REALISTA
     plateBadgeHorizontal: {
         backgroundColor: '#FFFFFF',
@@ -169,5 +132,19 @@ export const styles = StyleSheet.create({
         marginTop: 6,
         marginBottom: 16,
         lineHeight: 18,
+    },
+    addButton: {
+        flexDirection: 'row',
+        backgroundColor: '#3182C3',
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 14,
+        alignItems: 'center',
+        gap: 8,
+    },
+    addButtonText: {
+        color: '#FFFFFF',
+        fontWeight: '600',
+        fontSize: 14,
     },
 })

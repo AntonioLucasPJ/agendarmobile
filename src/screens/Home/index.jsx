@@ -12,10 +12,15 @@ import api from "../../constants/api.js";
 
 import { AuthContext } from "../../contexts/auth.js";
 import { MecanicoContext } from "../../contexts/mecanico.jsx";
+import { Vehicle } from "../../components/vehicle/index.jsx";
 export function TelaHome(props) {
     const { user } = useContext(AuthContext)
     const [mecanicos, setmecanicos] = useState('')
-    const [vehicle, setvehicle] = useState('')
+    const [vehicle, setvehicle] = useState([])
+    const [brand, setbrand] = useState([])
+    const [model, setmodel] = useState([])
+    const [license_plate, setlicense_plate] = useState([])
+    const [colorcar, setcolorcar] = useState([])
     const {
         id_selectmecanico, setidselectmecanico,
         name_selectmecanico, setname_selectmecanico,
@@ -37,60 +42,82 @@ export function TelaHome(props) {
         try {
             const res = await api.get("/mecanicos")
             setmecanicos(res.data)
+
         } catch (error) {
             console.log(error)
         }
     }
+    async function LoadVehicleClients() {
+        try {
+            const res = await api.get('/vehicle/searchvehicle')
+            setvehicle(res.data)
+            setbrand(res.data.brand)
+            setmodel(res.data.model)
+            setlicense_plate(res.data.license_plate)
+            setcolorcar(res.data.color)
+        } catch (error) {
+            console.log(error.response.data)
+        }
+    }
     useEffect(() => {
         LoadHome()
+        LoadVehicleClients()
     }, [])
-    const RenderHeader = () => (
-        vehicle ? (
-            <View style={styles.card} >
-                <Text style={styles.welcomeText}>Ola, {user.name}</Text>
-                <Text style={styles.cardTitle}>Seu veiculo</Text>
-                <View style={styles.vehicleInfoContainer}>
-                    <Image
-                        style={styles.vehicleImageReal}
-                        resizeMode='cover'
-                        source={{ uri: 'https://res.cloudinary.com/dniwjfgal/image/upload/v1780599613/car-onix_eg5us5.png' }}>
+    const RenderHeader = () => {
+        return (
+            <View style={styles.headerContainer}>
+                <View style={styles.welcomeRow}>
+                    <Text style={styles.welcomeText}>Olá, {user?.name || 'Cliente'}</Text>
+                    <Text style={styles.subWelcomeText}>Seja bem-vindo de volta!</Text>
+                </View>
+                <Text style={styles.sectionTitle}>Seus Carros</Text>
+                {vehicle.length > 0 ? (
+                    <FlatList
+                        data={vehicle}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        snapToAlignment="start"
+                        snapToInterval={314}
+                        decelerationRate='fast'
+                        contentContainerStyle={styles.carouselContainer}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => {
+                            // return <Vehicle
+                            //     brand={item.brand}
+                            //     model={item.model}
+                            //     license_plate={item.license_plate}
+                            //     color={item.color}
+                            // ></Vehicle>
 
-                    </Image>
-                    <View style={styles.vehicleDetails}>
-                        <Text style={styles.vehicleDetails}>Modelo:Onix Plus</Text>
-                        <Text style={styles.vehicleDetails}>Placa:OIZ-3H80</Text>
-                        <Text style={styles.vehicleDetails}>Cor:Cinza</Text>
-                        <View style={styles.statusBadge}>
-                            <View style={[styles.statusDot]}></View>
-                            <Text style={styles.statusText}>Status:200</Text>
+                        }
+                        }
+                    />
+
+                ) : (
+                    <View style={styles.card}>
+                        <Text>Cadastre seu veiculo</Text>
+                        <View style={styles.emptyStateContainer}>
+                            <MaterialCommunityIcons name='garage-alert' size={70} color='#A0AEC0'></MaterialCommunityIcons>
+                            <TouchableOpacity
+                                style={styles.addButton}
+                                onPress={() => props.navigation.navigate('vehicle')}
+
+                            >
+                                <Text style={styles.addButtonText}>Adicionar Veiculo</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                </View>
+                )}
             </View >
-        ) : (
-            <View style={styles.card}>
-                <Text style={styles.cardTitle}>Cadastre seu veiculo</Text>
-                <View style={styles.emptyStateContainer}>
-                    <MaterialCommunityIcons name='garage-alert' size={70} color='#A0AEC0'></MaterialCommunityIcons>
-                    <TouchableOpacity
-                        style={styles.addButton}
-                        onPress={() => props.navigation.navigate('vehicle')}
-
-                    >
-                        <Text style={styles.addButtonText}>Adicionar Veiculo</Text>
-                    </TouchableOpacity>
-                </View>
-
-            </View>
         )
-    );
+    }
     return (
         <SafeAreaView style={styles.safearea}>
             <FlatList
                 data={mecanicos}
                 keyExtractor={(doc) => doc.id_mecanico}
                 showsHorizontalScrollIndicator={false}
-                ListHeaderComponent={RenderHeader}  
+                ListHeaderComponent={RenderHeader}
                 scrollEnabled={true}
                 renderItem={({ item }) => {
                     return <Mecanico

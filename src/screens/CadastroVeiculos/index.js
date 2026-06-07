@@ -27,6 +27,17 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F8FAFC'
     },
+    containerDeFundo: {
+        flex: 1,
+    },
+    absoluteBlur: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        zIndex: 99, 
+    },
     content: {
         padding: 20
     },
@@ -97,19 +108,19 @@ export const styles = StyleSheet.create({
     },
     brandLogo: {
         width: '100%',
-        height:100
+        height: 100
 
     }, // tintColor aplica filtro cinza nas logos
     cardText: {
         fontSize: 14,
         color: '#4A5568',
         fontWeight: '600',
-        textAlign:'center',
-        marginTop:8
+        textAlign: 'center',
+        marginTop: 8
     },
     cardTextSelected: {
         color: '#3182CE',
-        fontWeight:'700'
+        fontWeight: '700'
     },
 
     // Grid de Modelos
@@ -163,7 +174,49 @@ export const styles = StyleSheet.create({
         fontSize: 15,
         color: '#0F172A'
     },
+    gridContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',          // Faz os itens irem para a linha de baixo automaticamente
+        justifyContent: 'space-between', // Distribui os itens de forma idêntica nas pontas
+        paddingVertical: 8,
+    },
+    colorCard: {
+        width: '30%',              // Ocupa quase 1/3 da largura total da tela
+        backgroundColor: '#F7FAFC',
+        borderRadius: 12,
+        paddingVertical: 16,
+        alignItems: 'center',      // Centraliza a bolinha e o texto no meio do cartão
+        justifyContent: 'center',
+        marginBottom: 12,          // Espaço para os cartões de baixo não colarem
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
+    },
+    colorCardSelected: {
+        borderColor: '#3182CE',
+        backgroundColor: '#EBF8FF',
+    },
+    colorCircleGrid: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        marginBottom: 8,           // Espaço entre a bolinha e o texto embaixo dela
+        // Sombra leve para dar profundidade às cores claras (como branco/prata)
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        elevation: 1,
+    },
+    colorCardText: {
+        fontSize: 13,
+        fontWeight: '500',
+        color: '#4A5568',
+        textAlign: 'center',
+    },
 
+    colorCardTextSelected: {
+        color: '#2B6CB0',
+        fontWeight: '700',
+    },
     // Botão de envio
     saveButton: {
         backgroundColor: '#3182CE',
