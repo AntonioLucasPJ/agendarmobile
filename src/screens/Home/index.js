@@ -50,6 +50,32 @@ export const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 6,
     },
+
+    cardAddVehicleVisual: {
+        width: 300,             // Mesma largura do seu card de veículo normal
+        marginRight: 20,        // Mesma margem (300 + 20 = os 320 do seu snapToInterval)
+        backgroundColor: '#F7FAFC', // Um fundo cinza bem claro e sutil
+        borderStyle: 'dashed',  // Deixa a borda pontilhada/tracejada (indica placeholder)
+        borderWidth: 2,
+        borderColor: '#CBD5E0', // Cor da borda pontilhada
+        borderRadius: 12,       // Arredondamento idêntico ao do card normal
+        padding: 20,
+        // Centraliza o ícone e o texto perfeitamente no meio do card
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        // Altura idêntica à do seu card de veículo atual para alinhar perfeitamente
+        height: 200, // Ajuste esse valor caso o seu card atual seja maior ou menor
+    },
+
+    // 🔥 NOVO: Estilo para o texto dentro do card de adição
+    addVehicleCardText: {
+        marginTop: 12,
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#002F6C',       // Usando a cor azul principal da sua marca
+        textAlign: 'center',
+    },
     cardTopRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',

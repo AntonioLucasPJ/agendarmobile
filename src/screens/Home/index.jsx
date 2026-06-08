@@ -21,6 +21,7 @@ export function TelaHome(props) {
     const [model, setmodel] = useState([])
     const [license_plate, setlicense_plate] = useState([])
     const [colorcar, setcolorcar] = useState([])
+    const [selectvehicleid,setselectvehicleid] = useState(null)
     const {
         id_selectmecanico, setidselectmecanico,
         name_selectmecanico, setname_selectmecanico,
@@ -51,6 +52,9 @@ export function TelaHome(props) {
         try {
             const res = await api.get('/vehicle/searchvehicle')
             setvehicle(res.data)
+            if(res.data && res.data.length >0){
+                // setselectvehicleid(res.data[0].id || res.data[0].id)
+            }
             setbrand(res.data.brand)
             setmodel(res.data.model)
             setlicense_plate(res.data.license_plate)
@@ -63,17 +67,20 @@ export function TelaHome(props) {
         LoadHome()
         LoadVehicleClients()
     }, [])
+    useEffect(()=>{
+        console.log(selectvehicleid)
+    },[selectvehicleid])
     const RenderHeader = () => {
+        const dadosCarrocel = [...vehicle,{id:'ADD_BUTTON_KEY',isaddItem:true}]
         return (
             <View style={styles.headerContainer}>
                 <View style={styles.welcomeRow}>
                     <Text style={styles.welcomeText}>Olá, {user?.name || 'Cliente'}</Text>
                     <Text style={styles.subWelcomeText}>Seja bem-vindo de volta!</Text>
                 </View>
-                <Text style={styles.sectionTitle}>Seus Carros</Text>
-                {vehicle.length > 0 ? (
+                <Text style={styles.sectionTitle}>Seus Carros</Text>   
                     <FlatList
-                        data={vehicle}
+                        data={dadosCarrocel}
                         horizontal
                         showsHorizontalScrollIndicator={false}
                         snapToAlignment="start"
@@ -82,32 +89,34 @@ export function TelaHome(props) {
                         contentContainerStyle={styles.carouselContainer}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item }) => {
+                            if(item.isaddItem){
+                                return(
+                                    <TouchableOpacity
+                                    style={[styles.vehicleCardHorizontal ,styles.cardAddVehicleVisual]}
+                                    onPress={()=> props.navigation.navigate('vehicle')}>
+                                        <MaterialCommunityIcons
+                                        name='car-select'
+                                        size={40}
+                                        color='#002F6C'
+                                        >
+                                            <Text style={styles.addVehicleCardText}> Cadastrar Novo Veiculo</Text>
+                                        </MaterialCommunityIcons>
+                                    </TouchableOpacity>
+                                )
+                            }
                             return <Vehicle
+                                idvehicle = {item.id}
                                 brand={item.brand}
                                 imagecar={item.imagemcar}
                                 model={item.model}
                                 license_plate={item.license_plate}
                                 color={item.color}
+                                idselected = {selectvehicleid}
+                                onselectedvehicle = {(id)=> setselectvehicleid(id)}
                             ></Vehicle>
                         }
                         }
                     />
-
-                ) : (
-                    <View style={styles.card}>
-                        <Text>Cadastre seu veiculo</Text>
-                        <View style={styles.emptyStateContainer}>
-                            <MaterialCommunityIcons name='garage-alert' size={70} color='#A0AEC0'></MaterialCommunityIcons>
-                            <TouchableOpacity
-                                style={styles.addButton}
-                                onPress={() => props.navigation.navigate('vehicle')}
-
-                            >
-                                <Text style={styles.addButtonText}>Adicionar Veiculo</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                )}
             </View >
         )
     }

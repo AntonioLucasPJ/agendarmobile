@@ -1,11 +1,15 @@
 
 import { FontAwesome6 } from '@expo/vector-icons'
 import {styles} from './index.js'
-import { Image,View,Text } from 'react-native'
+import { Image,View,Text, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 export function Vehicle(props){
+    const isSelected = props.idselected === props.idvehicle;
     return (
-        <View style={styles.vehicleCardHorizontal}>
+        <TouchableOpacity
+        style={[styles.vehicleCardHorizontal, isSelected && styles.cardSelecionado] }
+        onPress={()=> props.onselectedvehicle(props.idvehicle)}
+        >
             <View style={styles.cardTopRow}>
                 <View style={styles.brandBadge}>
                     <FontAwesome6 name='circle-check' size={14} color='#3182C3'></FontAwesome6>
@@ -36,7 +40,7 @@ export function Vehicle(props){
                 <View style={styles.statusDotHorizontal}></View>
                 <Text style={styles.statusTextHorizontal}>Pronto para uso</Text>
             </View>
-        </View>
+        </TouchableOpacity>
 
     )
 }

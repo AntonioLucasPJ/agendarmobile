@@ -5,6 +5,7 @@ import { Perfil } from "../Perfil/index.jsx";
 import { Calendary } from "../Calendary/index.jsx";
 import icon from '../../constants/icon.js'
 import { Image } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
 export function Main() {
     return (
@@ -13,20 +14,18 @@ export function Main() {
                 name='Home'
                 component={TelaHome}
                 options={{
+                    headerShown:false,
+                    tabBarShowLabel:false,
                     headerTitleAlign: 'center',
-                    headerTitle: () => {
-                        return <Image source={icon.logo} style={{ width: 120, height: 60 }}></Image>
-                    },
                     tabBarShowLabel: false,
-                    tabBarIcon: ({ focused }) => {
-                        return <Image
-                            source={icon.casa}
-                            style={{
-                                width: 30,
-                                height: 30,
-                                opacity: focused ? 1 : 0.3
-                            }}
-                        ></Image>
+                    tabBarIcon: ({ focused,color,size }) => {
+                        return (
+                            <Ionicons
+                                name={focused ? 'home': 'home-outline'}
+                                size={26}
+                                color={focused? '#002f6c':'#a0aec0'}
+                            ></Ionicons>
+                        )
                     }
                 }}
             ></Tab.Screen>
@@ -35,18 +34,14 @@ export function Main() {
                 component={Calendary}
                 options={{
                     headerTitleAlign: 'center',
-                    headerTitle: () => {
-                        return <Image source={icon.logo} style={{ width: 120, height: 60 }}></Image>
-                    },
+                    headerTitle: 'Meus Agendamentos',
                     tabBarIcon: ({ focused }) => {
-                        return <Image
-                            source={icon.calendar}
-                            style={{
-                                width: 30,
-                                height: 30,
-                                opacity: focused ? 1 : 0.3
-                            }}>
-                        </Image>
+                        return <Ionicons
+                            name={focused ? "calendar": "calendar-outline"}
+                            size={26}
+                            color={focused ? "#002F6C":"#A0AEC0"}
+                            >
+                        </Ionicons>
                     },
                     tabBarShowLabel: false,
                     unmountOnBlur:true,
@@ -60,14 +55,13 @@ export function Main() {
                     headerTitleAlign: "center",
                     tabBarShowLabel: false,
                     tabBarIcon: ({ focused }) => {
-                        return <Image
-                            source={icon.user}
-                            style={{
-                                width: 35,
-                                height: 35,
-                                opacity: focused ? 1 : 0.3
-                            }}
-                        ></Image>
+                        return (
+                        <Ionicons
+                            name={focused ?"person":"person-outline"}
+                            size={26}
+                            color={focused? "#002F6C":"#A0AEC0"}
+                        />
+                        );
                     }
                 }}
             ></Tab.Screen>

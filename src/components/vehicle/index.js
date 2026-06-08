@@ -13,13 +13,23 @@ export const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 6,
     },
+    cardSelecionado: {
+        borderColor:'#42991E',
+      // Azul celeste brilhante para destacar o carro ativo
+        backgroundColor: '#0F172A',  // Mantém o mesmo fundo do card
+        shadowColor: '#4299E1',      // Sombra brilhante na cor do destaque (opcional, fica muito moderno)
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.35,
+        shadowRadius: 6.22,
+        elevation: 8,                // Destaca o card no Android
+    },
     cardTopRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width:'100%',
-        height:40,
-        marginBottom:10
+        width: '100%',
+        height: 40,
+        marginBottom: 10
     },
     brandBadge: {
         flexDirection: 'row',
@@ -36,14 +46,14 @@ export const styles = StyleSheet.create({
         color: '#ffffff',
         textTransform: 'uppercase',
         letterSpacing: 0.5,
-        includeFontPadding:false
+        includeFontPadding: false
     },
     vehicleCardContent: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         marginVertical: 12,
-        width:'100%'
+        width: '100%'
     },
     vehicleImageRealHorizontal: {
         width: 110,
@@ -52,7 +62,7 @@ export const styles = StyleSheet.create({
     },
     vehicleDetailsHorizontal: {
         flex: 1,
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     modelTextHorizontal: {
         fontSize: 19,
@@ -60,7 +70,7 @@ export const styles = StyleSheet.create({
         color: '#FFFFFF',
         marginBottom: 6,
     },
-    
+
     // 🔥 TAG FORMATO PLACA MERCOSUL REALISTA
     plateBadgeHorizontal: {
         backgroundColor: '#FFFFFF',
