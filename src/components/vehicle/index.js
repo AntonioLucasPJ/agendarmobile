@@ -2,11 +2,11 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     vehicleCardHorizontal: {
-        width: 300,
-        backgroundColor: '#0F172A', // Slate 900 (Fundo escuro premium ultra moderno)
-        borderRadius: 20,
+        width: 380,
+        backgroundColor: '#0A0F1D', // Slate 900 (Fundo escuro premium ultra moderno)
+        borderRadius: 18,
         padding: 16,
-        marginRight: 14,
+        marginRight: 12,
         shadowColor: '#0F172A',
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.15,
@@ -17,27 +17,33 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        width:'100%',
+        height:40,
+        marginBottom:10
     },
     brandBadge: {
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#1E293B',
         paddingHorizontal: 10,
-        paddingVertical: 4,
+        paddingVertical: 5,
         borderRadius: 20,
         gap: 6,
     },
     vehicleBrandText: {
         fontSize: 11,
         fontWeight: '700',
-        color: '#3182C3',
+        color: '#ffffff',
         textTransform: 'uppercase',
         letterSpacing: 0.5,
+        includeFontPadding:false
     },
     vehicleCardContent: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 14,
+        justifyContent:'space-between',
+        marginVertical: 12,
+        width:'100%'
     },
     vehicleImageRealHorizontal: {
         width: 110,
@@ -46,6 +52,7 @@ export const styles = StyleSheet.create({
     },
     vehicleDetailsHorizontal: {
         flex: 1,
+        justifyContent:'center'
     },
     modelTextHorizontal: {
         fontSize: 19,

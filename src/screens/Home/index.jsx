@@ -12,7 +12,7 @@ import api from "../../constants/api.js";
 
 import { AuthContext } from "../../contexts/auth.js";
 import { MecanicoContext } from "../../contexts/mecanico.jsx";
-import { Vehicle } from "../../components/vehicle/index.jsx";
+import  {Vehicle}  from "../../components/vehicle/index.jsx";
 export function TelaHome(props) {
     const { user } = useContext(AuthContext)
     const [mecanicos, setmecanicos] = useState('')
@@ -82,13 +82,13 @@ export function TelaHome(props) {
                         contentContainerStyle={styles.carouselContainer}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item }) => {
-                            // return <Vehicle
-                            //     brand={item.brand}
-                            //     model={item.model}
-                            //     license_plate={item.license_plate}
-                            //     color={item.color}
-                            // ></Vehicle>
-
+                            return <Vehicle
+                                brand={item.brand}
+                                imagecar={item.imagemcar}
+                                model={item.model}
+                                license_plate={item.license_plate}
+                                color={item.color}
+                            ></Vehicle>
                         }
                         }
                     />

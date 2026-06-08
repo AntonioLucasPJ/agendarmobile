@@ -1,30 +1,36 @@
 
-import { MaterialCommunityIcons,Ionicons } from '@expo/vector-icons'
+import { FontAwesome6 } from '@expo/vector-icons'
 import {styles} from './index.js'
-import { Image,View } from 'react-native'
-
+import { Image,View,Text } from 'react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 export function Vehicle(props){
-    return(
+    return (
         <View style={styles.vehicleCardHorizontal}>
             <View style={styles.cardTopRow}>
                 <View style={styles.brandBadge}>
-                    <MaterialCommunityIcons name='shield-check' size={14}></MaterialCommunityIcons>
+                    <FontAwesome6 name='circle-check' size={14} color='#3182C3'></FontAwesome6>
                     <Text style={styles.vehicleBrandText}>{props.brand|| 'Generic Marcs'}</Text>
                 </View>
-                <Ionicons name='elipsis-horizontal' size={24} color='#94A3B8'></Ionicons>
+                <MaterialCommunityIcons name='dots-horizontal' size={24} color='#94A3B8'></MaterialCommunityIcons>
             </View>
             <View
             style={styles.vehicleCardContent}>
                 <Image
                     style={styles.vehicleImageRealHorizontal}
                     resizeMode='contain'
-                    source={{uri:'https://res.cloudinary.com/dniwjfgal/image/upload/v1780599613/car-onix_eg5us5.png'}}
+                    source={{uri:props.imagecar}}
                 ></Image>
-                <View style={styles.plateBadgeHorizontal}>
-                    <View style={styles.plateBlueBar}></View>
-                    <Text style={styles.plateTextHorizontal}>{props.license_plate ||'OIZ-33D'}</Text>
+                <View style={styles.vehicleDetailsHorizontal}>
+                    <Text style={styles.modelTextHorizontal} numberOfLines={1}>
+                        {props.model}
+                    </Text>
+                
+                    <View style={styles.plateBadgeHorizontal}>
+                        <View style={styles.plateBlueBar}></View>
+                        <Text style={styles.plateTextHorizontal}>{props.license_plate ||'OIZ-33D'}</Text>
+                    </View>
+                    <Text style={styles.colorTextHorizontal}>Cor:  {props.color ||'Red'}</Text>
                 </View>
-                <Text style={styles.colorTextHorizontal}>Cor:{props.color |'Red'}</Text>
             </View>
             <View style={styles.cardFooterRow}>
                 <View style={styles.statusDotHorizontal}></View>
