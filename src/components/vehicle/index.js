@@ -14,14 +14,15 @@ export const styles = StyleSheet.create({
         elevation: 6,
     },
     cardSelecionado: {
-        borderColor:'#42991E',
+        borderColor:'#7ce142',
       // Azul celeste brilhante para destacar o carro ativo
-        backgroundColor: '#0F172A',  // Mantém o mesmo fundo do card
+        backgroundColor: '#002F6C',  // Mantém o mesmo fundo do card
+        opacity:1,
         shadowColor: '#4299E1',      // Sombra brilhante na cor do destaque (opcional, fica muito moderno)
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.35,
-        shadowRadius: 6.22,
-        elevation: 8,                // Destaca o card no Android
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.4,
+        shadowRadius: 5,
+        elevation: 10,                // Destaca o card no Android
     },
     cardTopRow: {
         flexDirection: 'row',

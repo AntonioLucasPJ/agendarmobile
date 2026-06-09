@@ -4,10 +4,14 @@ import {styles} from './index.js'
 import { Image,View,Text, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 export function Vehicle(props){
-    const isSelected = props.idselected === props.idvehicle;
+    const isSelected = String(props.idselected) === String(props.idvehicle);
+    console.log('Card do carro',props.model,'|Id do carro:',props.idvehicle, "| ID Selecionado no App:", props.idselected)
     return (
         <TouchableOpacity
-        style={[styles.vehicleCardHorizontal, isSelected && styles.cardSelecionado] }
+        activeOpacity={0.9}
+        style={[
+            styles.vehicleCardHorizontal,
+            isSelected && styles.cardSelecionado] }
         onPress={()=> props.onselectedvehicle(props.idvehicle)}
         >
             <View style={styles.cardTopRow}>
