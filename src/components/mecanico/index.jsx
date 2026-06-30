@@ -12,7 +12,7 @@ export function Mecanico(props) {
                 style={styles.avatar}
             />
             <View style={styles.infoContainer}>
-                <Text style={styles.titleText}>{props.titulo_professional}</Text>
+                <Text style={styles.titleText}>{props.titulo_profissional}</Text>
                 <Text style={styles.specialtyText}>{props.especiality}</Text>
                 <View style={styles.headerRow}>
                     <Text style={styles.nameText}>{props.name}</Text>

@@ -1,5 +1,5 @@
-import { FlatList, Image, Text, View, ScrollView, TouchableOpacity } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { FlatList, Image, Text, View, ScrollView, TouchableOpacity, Dimensions } from "react-native";
+import { useCallback, useContext, useEffect, useState } from "react";
 import icon from '../../constants/icon.js'
 import { styles } from "./index.js";
 import { Mecanico } from "../../components/mecanico/index.jsx";
@@ -13,8 +13,12 @@ import api from "../../constants/api.js";
 import { AuthContext } from "../../contexts/auth.js";
 import { MecanicoContext } from "../../contexts/mecanico.jsx";
 import { Vehicle } from "../../components/vehicle/index.jsx";
+import { TelaCadastroVeiculos } from "../CadastroVeiculos/index.jsx";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { MeetService } from "../../components/service/index.jsx";
+import Loading from "../../components/loading/index.jsx";
 
-const RenderHeader = ({vehicle,user,selectvehicleid,setselectvehicleid,navigation}) => {
+const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAddVechicle }) => {
     const dadosCarrocel = [...vehicle, { id_vehicle: 'ADD_BUTTON_KEY', isaddItem: true }]
     return (
         <View style={styles.headerContainer}>
@@ -38,7 +42,7 @@ const RenderHeader = ({vehicle,user,selectvehicleid,setselectvehicleid,navigatio
                         return (
                             <TouchableOpacity
                                 style={[styles.vehicleCardHorizontal, styles.cardAddVehicleVisual]}
-                                onPress={() => props.navigation.navigate('vehicle')}>
+                                onPress={onAddVechicle}>
                                 <MaterialCommunityIcons
                                     name='car-select'
                                     size={40}
@@ -64,15 +68,23 @@ const RenderHeader = ({vehicle,user,selectvehicleid,setselectvehicleid,navigatio
         </View >
     )
 }
-export function TelaHome(props) {
+export function TelaHome({ navigation }) {
+    const [loading, setloading] = useState(false)
+    const navigate = useNavigation()
     const { user } = useContext(AuthContext)
-    const [mecanicos, setmecanicos] = useState('')
+    const [mecanicos, setmecanicos] = useState([])
+    const [services, setservices] = useState([])
     const [vehicle, setvehicle] = useState([])
     const [brand, setbrand] = useState([])
     const [model, setmodel] = useState([])
     const [license_plate, setlicense_plate] = useState([])
     const [colorcar, setcolorcar] = useState([])
     const [selectvehicleid, setselectvehicleid] = useState('')
+    const { width } = Dimensions.get("window");
+    const CARD_WIDTH = (width - 48) / 2;
+    const awaiting = (ms) => new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("TIMEOUT_ESTOURADO")), ms)
+    );
     const {
         id_selectmecanico, setidselectmecanico,
         name_selectmecanico, setname_selectmecanico,
@@ -80,20 +92,30 @@ export function TelaHome(props) {
         icon_selectmecanico, seticon_selectmecanico,
         avatar_selectmecanico, setavatar_selectmecanico,
     } = useContext(MecanicoContext)
-    function ClickMecanico(id_mecanico, name, specialty, icon, avatar) {
-        setidselectmecanico(id_mecanico)
-        setname_selectmecanico(name)
-        setspecialty_selectmecanico(specialty)
-        seticon_selectmecanico(icon)
-        setavatar_selectmecanico(avatar)
-        props.navigation.navigate("services", {
-            id_mecanico, name, specialty, icon, avatar
-        })
+    function ClickAddVehicle() {
+        navigation.navigate("vehicle")
+    }
+    async function ClickService(id_service) {
+        setloading(true)
+        try {
+            const res = await Promise.race([
+                api.get(`/servicesmecanicos/${id_service}`),
+                await awaiting(5000)
+            ])
+            setloading(false)
+            setmecanicos(res.data)
+            console.log(res.data)
+
+        } catch (error) {
+            setloading(false)
+            console.log(error)
+        }
+
     }
     async function LoadHome() {
         try {
-            const res = await api.get("/mecanicos")
-            setmecanicos(res.data)
+            const res = await api.get("/servicessearch")
+            setservices(res.data)
 
         } catch (error) {
             console.log(error)
@@ -101,10 +123,10 @@ export function TelaHome(props) {
     }
     async function LoadVehicleClients() {
         try {
-            const res = await api.get('/vehicle/searchvehicle')
+            const res = await api.post(`/vehicle/searchvehicle/${user.id_user}`)
             setvehicle(res.data)
             if (res.data && res.data.length > 0) {
-                console.log(res.data[0].id || res.data[0].id)
+                // console.log(res.data[0].id || res.data[0].id)
             }
             setbrand(res.data.brand)
             setmodel(res.data.model)
@@ -114,44 +136,49 @@ export function TelaHome(props) {
             console.log(error.response.data)
         }
     }
-    useEffect(() => {
-        LoadHome()
-        LoadVehicleClients()
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            LoadHome()
+            LoadVehicleClients()
+        }, [])
+    );
 
     return (
         <SafeAreaView style={styles.safearea}>
+            <Loading visible={loading}></Loading>
             <FlatList
-                data={mecanicos}
-                keyExtractor={(doc) => doc.id_mecanico}
+                data={Array.isArray(services) ? services.slice(0, 4) : []}
+                keyExtractor={(doc) => doc.id_service}
+                numColumns={2}
+                columnWrapperStyle={styles.columnWrapper}
+                contentContainerStyle={styles.gridContainer}
                 showsHorizontalScrollIndicator={false}
                 ListHeaderComponent={
-                    <RenderHeader
-                        vehicle={vehicle}
-                        user={user}
-                        selectvehicleid={selectvehicleid}
-                        setselectvehicleid={setselectvehicleid}
-                        navigation={props.navigation}
-                    >
-                    </RenderHeader>
+                    <>
+                        <RenderHeader
+                            vehicle={vehicle}
+                            user={user}
+                            selectvehicleid={selectvehicleid}
+                            setselectvehicleid={setselectvehicleid}
+                            onAddVechicle={ClickAddVehicle}
+                        >
+                        </RenderHeader>
+                        <Text style={styles.sectionTitle}>Selecione seu Servico</Text>
+
+                    </>
                 }
-                scrollEnabled={true}
                 renderItem={({ item }) => {
-                    return <Mecanico
-                        id_mecanico={item.id_mecanico}
-                        name={item.name}
-                        titulo_professional={item.titulo_profissional}
-                        avatar={item.avatar_url}
-                        avaliacao={item.avaliacao}
-                        experiencia={item.experiencia}
-                        icon={item.icon}
-                        especiality={item.specialty}
-                        onPress={ClickMecanico}
-                    ></Mecanico>
+                    return <MeetService
+                        id_service={item.id_service}
+                        id_icon={item.icone_id}
+                        service={item.service}
+                        description={item.description}
+                        card_width={CARD_WIDTH}
+                        onPress={() => ClickService(item.id_service)}
+                    ></MeetService>
                 }}
             ></FlatList>
+
         </SafeAreaView>
-
-
     )
 }

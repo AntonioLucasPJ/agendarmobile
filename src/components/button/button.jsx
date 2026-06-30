@@ -23,7 +23,6 @@ export function EyesButton({onPress,showPassword}) {
     function enviarmsg() {
         alert('A mensagem foi enviada')
     }
-    {console.log(showPassword)}
     return (
         <TouchableOpacity
             style={styles.buttonpassword}

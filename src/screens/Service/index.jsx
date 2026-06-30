@@ -10,10 +10,11 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/auth.js";
 import { MecanicoContext } from "../../contexts/mecanico.jsx";
 import { ServiceContext } from "../../contexts/service.jsx";
+import { Mecanico } from "../../components/mecanico/index.jsx";
 export function Service(props) {
-    const id_mecan = props.route.params.id_mecanico;
-    const name = props.route.params?.name || { name: 'Não Identificado' }
-    const specialty = props.route.params.specialty
+
+    const {id_mecanico,name,titulo_profissional,avaliacao,experiencia} = props.route.params
+    console.log(id_mecanico)
     const iconMec = props.route.params.icon
     const url = props.route.params.avatar
     const [msg, setmsg] = useState('')
@@ -83,13 +84,13 @@ export function Service(props) {
                     keyExtractor={(ser) => ser.id_service}
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item }) => {
-                        return <MeetService
-                            id_service={item.id_service}
-                            service={item.service}
-                            descripition={item.description}
-                            price={item.price}
-                            id_icon={item.icone_id}
-                            onPress={ClickS}></MeetService>
+                        return <Mecanico
+                            id_mecanico={item.id_mecanico}
+                            name={item.name}
+                            titulo_profissional={item.titulo_profissional}
+                            avaliacao={item.avaliacao}
+                            experiencia={item.experiencia}
+                            onPress={ClickS}></Mecanico>
                     }}
                 ></FlatList>
                 :

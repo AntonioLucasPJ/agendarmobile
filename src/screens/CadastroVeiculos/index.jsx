@@ -107,11 +107,12 @@ export function TelaCadastroVeiculos() {
     }, [selectedBrand])
     async function CreateSingVehicle() {
         const dadosapi = {
-            id_user: user.id_user,
+            user_id: user.id_user,
             model_id: selectedModel,
-            license_plate: plate,
+            car_license_plate: plate,
             color: color
         }
+        
         try {
             setloading(true)
             await waiting(2000)
@@ -120,7 +121,8 @@ export function TelaCadastroVeiculos() {
             setmsgnotification(res.data.message)
             setTimeout(() => {
                 setactivenotification(!activenotification)
-            }, [1500])
+                navigation.goBack()
+            }, [1000])
 
         } catch (error) {
             console.log(error)

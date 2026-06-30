@@ -1,110 +1,76 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { color } from "../../constants/theme";
+const { width } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
+    
+    gridContainer: {
+        paddingHorizontal: 20,
+        paddingBottom: 24,
+    },
+    columnWrapper: {
+        justifyContent: 'space-between', // Distribui os dois componentes igualmente nas pontas
+        marginBottom: 16, // Espaçamento vertical entre as linhas do cubo
+    },
+
+    // Estilos internos do Componente MeetService transformado em Quadrado
     serviceCard: {
-        backgroundColor: '#ffffff',
-        borderRadius: 20,
-        padding: 16,
-        marginVertical: 8,
-        borderWidth: 1,
-        borderColor: '#cbd5e1',
-        elevation: 2,
-    },
-    serviceTopRow: {
-        flexDirection: 'row',
+        height: 150, // Altura fixa para deixá-lo quadradinho
+        backgroundColor: '#FFFFFF',
+        borderRadius: 16,
+        padding: 12,
         alignItems: 'center',
-    },
-    iconContainer: {
-        width: 65,
-        height: 60,
-        backgroundColor: '#cbd5e1',
-        borderRadius: 14,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    serviceTextContainer: {
-        flex: 1,
-        paddingLeft: 14,
-    },
-    serviceName: {
-        fontSize: 20,
-        fontWeight: '700',
-        color: '#0f172a',
-    },
-    serviceDescription: {
-        fontSize: 14,
-        color: '#334155',
-        marginTop: 2,
-    },
-    serviceBottomRow: {
-        flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 14,
-    },
-    priceBadge: {
-        backgroundColor: '#d97706',
-        paddingHorizontal: 16,
-        paddingVertical: 6,
-        borderRadius: 14,
-    },
-    priceText: {
-        color: '#ffffff',
-        fontSize: 16,
-        fontWeight: '700',
-    },
-    btnAgendar: {
-        paddingHorizontal: 28,
-        paddingVertical: 8,
-        borderRadius: 14,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    btnText: {
-        color: '#ffffff',
-        fontSize: 15,
-        fontWeight: '700',
-    },
-    bottomTabBar: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: 70,
-        backgroundColor: '#cbd5e1',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        borderTopWidth: 1,
-        borderColor: '#94a3b8',
-    },
-    tabItem: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    activeTabCircle: {
-        width: 46,
-        height: 46,
-        borderRadius: 23,
-        alignItems: 'center',
-        justifyContent: 'center',
+        // Sombras
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.04,
+        shadowRadius: 6,
         elevation: 2,
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
     },
-    inactiveTabBox: {
-        width: 44,
-        height: 44,
-        backgroundColor: '#475569',
-        borderRadius: 10,
+    iconContainerCube: {
+        flexDirection:'row',
+        width: 50,
+        height: 50,
+        borderRadius: 22,
+        backgroundColor: '#F1F5F9',
         alignItems: 'center',
         justifyContent: 'center',
-        position: 'relative',
     },
-    inactiveTabBoxText: {
-        color: '#ffffff',
+    textContainerCube: {
+        alignItems: 'center',
+        width: '100%',
+    },
+    serviceNameCube: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#334155',
+        textAlign: 'center',
+    },
+    bottomRowCube: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        borderTopWidth: 1,
+        borderTopColor: '#F1F5F9',
+        paddingTop: 8,
+    },
+    priceTextCube: {
         fontSize: 12,
         fontWeight: '700',
-        position: 'absolute',
-        bottom: 4,
+        color: '#ea580c',
+    },
+    btnAgendarCube: {
+        paddingHorizontal: 20,
+        paddingVertical: 6,
+        borderRadius: 12,
+    },
+    btnTextCube: {
+        color: '#FFF',
+        fontSize: 12,
+        fontWeight: '600',
     }
-})
+});

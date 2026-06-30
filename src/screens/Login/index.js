@@ -23,8 +23,8 @@ export const styles = StyleSheet.create({
         // opacity:0.1
     },
     logo: {
-        width: 180,
-        height: 60,
+        width: 250,
+        height: 200,
         resizeMode: 'contain',
         marginTop: 40,
         marginBottom: 20

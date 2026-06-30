@@ -7,52 +7,52 @@ import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { Icon } from "lucide-react-native";
 import { useEffect } from "react";
 export function MeetService(props) {
-    const formatarvalor = (valor) =>{
-        return new Intl.NumberFormat('pt-BR',{
-            style:'currency',
-            currency:'BRL'
+    const MapeamentosIcones = ({ nomeicone }) => {
+        const name = nomeicone?.toLowerCase()
+        switch(name){
+            case "lightning-bolt-outline":
+                return <FontAwesome name="gear" size={40} color='#334155'></FontAwesome>
+    
+            default:
+                return <FontAwesome name="gear" size={40} color="#64748b" />;
+            }
+
+    }
+    const formatarvalor = (valor) => {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
         }).format(valor)
     }
-    const renderServiceIcon = (IconName) => {
-        if (IconName === 'engine') {
-            return(
-            <MaterialCommunityIcons name='engine' size={25} color='#334155'></MaterialCommunityIcons>)
-        } else if (IconName === 'calendar-check') {
-            return(
-            <MaterialCommunityIcons name='calendar-check' size={25} color='#334155'></MaterialCommunityIcons>)
-        }
-        return (<FontAwesome name='screwdriver-wrench' size={40} color='#334155'></FontAwesome>)
-    }
-    return (
-        <View style={styles.serviceCard}>
-            <View style={styles.serviceTopRow}>
-                <View style={styles.iconContainer}>
-                    {renderServiceIcon(props.id_icon)}
-                </View>
-                <View style={styles.serviceTextContainer}>
-                    <Text style={styles.serviceName}>{props.service}</Text>
-                    <Text style={styles.serviceDescription}>{props.descripition}</Text>
-                </View>
-            </View>
-            <View style={styles.serviceBottomRow}>
-                <View style={styles.priceBadge}>
-                    <Text style={styles.priceText}>
-                        {formatarvalor(props.price)}
-                    </Text>
-                </View>
-                <TouchableOpacity
-                    onPress={() => props.onPress(props.id_service,props.id_icon,props.service,props.descripition,props.price)}
-                >
-                    <LinearGradient
-                        colors={['#1e40af', '#ea580c']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={styles.btnAgendar}
 
+    return (
+        <View style={[styles.serviceCard, { width: props.card_width }]}>
+            <View style={styles.cubeGrid}>
+                <View style={styles.iconContainerCube}>
+                    {/* renderServiceIcon tratando 'engine', 'electric', etc. */}
+                    <MapeamentosIcones nomeicone={props.id_icon}></MapeamentosIcones>
+
+                </View>
+                <View style={styles.textContainerCube}>
+                    <Text style={styles.textContainerCube} numberOfLines={1}>{props.service}</Text>
+                </View>
+                <View style={styles.bottomRowCube}>
+                    <TouchableOpacity
+                        key={props.id_service.toString()}
+                        style={[styles.cubeCard, { width: props.CARD_WIDTH }]}
+                        activeOpacity={0.8}
+                        onPress={() => props.onPress(props.id_service)}
                     >
-                        <Text style={styles.btnText}>Agendar</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
+                        <LinearGradient
+                            colors={['#1e40af', '#ea580c']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={styles.btnAgendarCube}
+                        >
+                            <Text style={styles.btnTextCube}>Selecionar</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
 

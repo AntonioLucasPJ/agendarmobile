@@ -6,11 +6,21 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F1F5F9'
     },
+    columnWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between', // Força os dois cards a irem para as extremidades
+        marginBottom: 16,                // Afasta a linha de cima da de baixo
+    },
+    gridContainer: {
+        paddingHorizontal: 16,           // Margem das bordas do celular
+        paddingBottom: 24,
+    },
     headerContainer: {
         paddingHorizontal: 16,
         paddingTop: 12,
         backgroundColor: '#F8FAFC', // Fundo de tela levemente acinzentado (estilo iOS)
     },
+
     welcomeRow: {
         marginBottom: 20,
     },
@@ -36,7 +46,30 @@ export const styles = StyleSheet.create({
         paddingRight: 16,
         paddingVertical: 4,
     },
+    servicesSection: {
+        marginTop: 10,
+    },
+    servicesCarouselContainer: {
+        paddingHorizontal: 20,
+        paddingBottom: 20, // Espaço para a sombra não cortar embaixo
+    },
+    // Se você puder ajustar o estilo dentro do componente <Servico />, use um padrão assim:
+    servicoCardItem: {
+        width: 250, // ➔ Tamanho fixo para caber no carrossel horizontal
+        height: 130,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 14,
+        padding: 16,
+        marginRight: 16, // Espaçamento entre um serviço e outro
+        justifyContent: 'space-between',
 
+        // Sombras leves e elegantes
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+        elevation: 3,
+    },
     // 🔥 O DESIGN DO CARTÃO DE CARRO (ESTILO BANCO DIGITAL)
     vehicleCardHorizontal: {
         width: 300,
