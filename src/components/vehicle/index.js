@@ -14,10 +14,10 @@ export const styles = StyleSheet.create({
         elevation: 6,
     },
     cardSelecionado: {
-        borderColor:'#7ce142',
-      // Azul celeste brilhante para destacar o carro ativo
+        borderColor: '#7ce142',
+        // Azul celeste brilhante para destacar o carro ativo
         backgroundColor: '#002F6C',  // Mantém o mesmo fundo do card
-        opacity:1,
+        opacity: 1,
         shadowColor: '#4299E1',      // Sombra brilhante na cor do destaque (opcional, fica muito moderno)
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.4,
@@ -165,4 +165,41 @@ export const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 14,
     },
+    menuWrapper: {
+        position: 'relative', // Permite que o dropdown use position absolute baseado nesta caixinha
+        zIndex: 999,          // Força o menu a ficar por cima das imagens e textos do card
+    },
+    dotsTouch: {
+        padding: 4,           // Aumenta a área de toque do botão de 3 pontos
+    },
+    dropdown: {
+        position: 'absolute',
+        top: 32,              // Joga o menu logo abaixo dos três pontos
+        right: 0,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 8,
+        paddingVertical: 4,
+        width: 110,
+        elevation: 5,         // Sombra projetada no Android
+        shadowColor: '#000',  // Sombra projetada no iOS
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+    },
+    dropdownItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        gap: 8,
+    },
+    dropdownText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#002F6C',
+    },
+    divider: {
+        height: 1,
+        backgroundColor: '#E2E8F0',
+    }
 })

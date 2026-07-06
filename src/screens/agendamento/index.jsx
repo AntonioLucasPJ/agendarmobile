@@ -22,6 +22,7 @@ export function Schedule() {
     const route = useRoute()
     const navigation = useNavigation()
     const { user } = useContext(AuthContext);
+    const {id_service,service,id_mecanico,vehicle_model,license_plate} = route.params
     const renderServiceIcon = (IconName) => {
         if (IconName === 'engine') {
             return (
@@ -45,6 +46,10 @@ export function Schedule() {
     const { serviceicon, servicename, servicedescription, serviceprice } = useContext(ServiceContext)
     const today_date = new Date().toISOString().split('T')[0]
     const {
+        id_mecan,setidmecan,
+        setidservice,
+        setlicense_plate,
+        setvehicle_model,
         statusapi,
         booking_hour, setbooking_hour,
         selectdate, setselectdate,
@@ -57,8 +62,12 @@ export function Schedule() {
         CheckhoursAvaileble
     } = useContext(ReservationContext)
     const formvalid = selectdate !== '' && booking_hour !== '';
-    function LoadData() {
-        Createappointment()
+    function LoadData(id_mecanico,id_service,vehicle_model,license_plate) {
+        setidmecan(id_mecanico)
+        setidservice(id_service)
+        setlicense_plate(license_plate)
+        setvehicle_model(vehicle_model)
+        Createappointment({id_mecanico,id_service,vehicle_model,license_plate})
     }
 
     function CleanNotification() {
@@ -89,12 +98,11 @@ export function Schedule() {
             >
                 <View style={styles.resumoCard}>
                     <View style={styles.resumoIconContainer}>
-                        {renderServiceIcon(serviceicon)}
+                        {renderServiceIcon(service)}
                     </View>
                     <View style={styles.resumoTextContainer}>
-                        <Text style={styles.resumoNome}>{servicename}</Text>
-                        <Text style={styles.resumoDescricao}>{servicedescription}</Text>
-                        <Text style={styles.resumoPreco}>{formatarvalor(serviceprice)}</Text>
+                        <Text style={styles.resumoNome}>{service}</Text>
+                        <Text style={styles.resumoDescricao}>Texto descricao de exemplos para teste</Text>
                     </View>
                 </View>
                 <Text style={styles.sectionTitle}>Selecione a Data</Text>
@@ -168,7 +176,7 @@ export function Schedule() {
                         styles.btnConfirmar,
                         !formvalid && styles.btnConfirmarDisabled
                     ]}
-                    onPress={() => LoadData()}>
+                    onPress={() => LoadData(id_mecanico,id_service,vehicle_model,license_plate)}>
                     <Text style={styles.btnConfirmarText}>CONFIRMAR RESERVA</Text>
                 </TouchableOpacity>
             </ScrollView>

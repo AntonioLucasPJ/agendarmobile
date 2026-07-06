@@ -19,6 +19,8 @@ export const ReservationProvider = ({ children }) => {
     const [reservation, setreservation] = useState([])
     const [id_mecan, setidmecan] = useState('')
     const [id_service, setidservice] = useState('')
+    const [vehicle_model,setvehicle_model] = useState('')
+    const [license_plate,setlicense_plate] = useState('')
     const [selectdate, setselectdate] = useState('')
     const [booking_hour, setbooking_hour] = useState('');
     const [statusapi, setstatusapi] = useState('')
@@ -33,7 +35,7 @@ export const ReservationProvider = ({ children }) => {
         setloandcalendary(true)
         try {
             await waiting(1500)
-            const res = await api.get(`/appointements`)
+            const res = await api.get(`/appointements/${user.id_user}`)
             setreservation(res.data)
             setloandcalendary(false)
 
@@ -65,14 +67,17 @@ export const ReservationProvider = ({ children }) => {
             setloadhours(false)
         }
     }
-    async function Createappointment() {
+    async function Createappointment(dados) {
         const dadosparaapi = {
-            id_mecanico: id_selectmecanico,
-            id_service: service_selectmecanico,
+            id_mecanico: dados.id_mecanico,
+            services: dados.id_service,
             id_user: user.id_user,
+            vehicle_model: dados.vehicle_model,
+            license_plate:dados.license_plate,
             booking_date: booking_date,
             booking_hour: booking_hour
         }
+        console.log(dadosparaapi)
         if (booking_date && booking_hour != "") {
             setloand(true)
             try {
@@ -110,6 +115,6 @@ export const ReservationProvider = ({ children }) => {
         }
     }
     return (
-        <ReservationContext.Provider value={{ id_mecan, setidmecan, loadinghours, horariosdisponiveis, id_service, setidservice, reservation, loand, loandcalendary, updatescreen, setloandcalendary, statusapi, setactivenotification, activenotification, activenotificationcalendary, setactivenotificationcalendary, msgnotification, setmsgnotification, msgnotificationcalendary, selectdate, setselectdate, booking_hour, setbooking_hour, CheckhoursAvaileble, Createappointment, Loadrese, DeleteReservar }}>{children}</ReservationContext.Provider>
+        <ReservationContext.Provider value={{ id_mecan, setidmecan, loadinghours, horariosdisponiveis, id_service, setidservice,setlicense_plate,setvehicle_model, reservation, loand, loandcalendary, updatescreen, setloandcalendary, statusapi, setactivenotification, activenotification, activenotificationcalendary, setactivenotificationcalendary, msgnotification, setmsgnotification, msgnotificationcalendary, selectdate, setselectdate, booking_hour, setbooking_hour, CheckhoursAvaileble, Createappointment, Loadrese, DeleteReservar }}>{children}</ReservationContext.Provider>
     )
 }

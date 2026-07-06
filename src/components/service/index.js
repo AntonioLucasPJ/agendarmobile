@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
 
     // Estilos internos do Componente MeetService transformado em Quadrado
     serviceCard: {
-        height: 150, // Altura fixa para deixá-lo quadradinho
+        height: 160, // Altura fixa para deixá-lo quadradinho
         backgroundColor: '#FFFFFF',
         borderRadius: 16,
         padding: 12,

@@ -2,9 +2,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { color } from "../constants/theme.js";
 import { Main } from "../screens/main";
 import { TelaCadastroVeiculos } from "../screens/CadastroVeiculos/index.jsx";
-import { Service } from "../screens/Service/index.jsx";
 import { Schedule } from '../screens/agendamento/index.jsx'
-
+import { LoadMecanico } from "../screens/Mecanicos/index.jsx";
 const Stack = createNativeStackNavigator();
 function RotasPrivadas() {
     return (
@@ -30,10 +29,10 @@ function RotasPrivadas() {
                 }}
             ></Stack.Screen>
             <Stack.Screen
-                name="services"
-                component={Service}
+                name="mecanicos"
+                component={LoadMecanico}
                 options={{
-                    headerTitle: "Servicos",
+                    headerTitle: "Mecanicos",
                     headerTitleAlign: "center",
                     headerShadowVisible: false,
                     headerTintColor: color.white,

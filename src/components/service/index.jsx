@@ -34,14 +34,14 @@ export function MeetService(props) {
 
                 </View>
                 <View style={styles.textContainerCube}>
-                    <Text style={styles.textContainerCube} numberOfLines={1}>{props.service}</Text>
+                    <Text style={styles.serviceNameCube} numberOfLines={2}>{props.service}</Text>
                 </View>
                 <View style={styles.bottomRowCube}>
                     <TouchableOpacity
                         key={props.id_service.toString()}
                         style={[styles.cubeCard, { width: props.CARD_WIDTH }]}
                         activeOpacity={0.8}
-                        onPress={() => props.onPress(props.id_service)}
+                        onPress={() => props.onPress(props.id_service,props.service)}
                     >
                         <LinearGradient
                             colors={['#1e40af', '#ea580c']}

@@ -1,6 +1,7 @@
 import { FlatList, Image, Text, View, ScrollView, TouchableOpacity, Dimensions } from "react-native";
 import { useCallback, useContext, useEffect, useState } from "react";
 import icon from '../../constants/icon.js'
+import { BlurView } from "expo-blur";
 import { styles } from "./index.js";
 import { Mecanico } from "../../components/mecanico/index.jsx";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,9 +18,27 @@ import { TelaCadastroVeiculos } from "../CadastroVeiculos/index.jsx";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MeetService } from "../../components/service/index.jsx";
 import Loading from "../../components/loading/index.jsx";
+import { Button } from "../../components/button/button.jsx";
 
-const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAddVechicle }) => {
+const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAddVechicle, onDeleteVehicle }) => {
     const dadosCarrocel = [...vehicle, { id_vehicle: 'ADD_BUTTON_KEY', isaddItem: true }]
+    const navigate = useNavigation()
+    const [loading, setloading] = useState(false)
+    function EditVehicle(id_vehicle) {
+        const findcar = vehicle.find(v => String(v.id) === String(id_vehicle))
+        if (!findcar) {
+            Alert.alert('Error', "Nao foi possivel localicar o veiculo")
+            return
+        }
+        const payloadparaenvio = {
+            id_vehicle: findcar.id,
+            brand: findcar.id_brand || '',
+            model: findcar.id_vehicle_models || '',
+            license_plate: findcar.license_plate || '',
+            color: findcar.color || ''
+        }
+        navigate.navigate('vehicle', { dadosveiculos: payloadparaenvio })
+    }
     return (
         <View style={styles.headerContainer}>
             <View style={styles.welcomeRow}>
@@ -48,8 +67,9 @@ const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAd
                                     size={40}
                                     color='#002F6C'
                                 >
-                                    <Text style={styles.addVehicleCardText}> Cadastrar Novo Veiculo</Text>
                                 </MaterialCommunityIcons>
+                                <Text style={styles.addVehicleCardText}> Cadastrar Novo Veiculo</Text>
+
                             </TouchableOpacity>
                         )
                     }
@@ -61,7 +81,9 @@ const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAd
                         license_plate={item.license_plate}
                         color={item.color}
                         idselected={selectvehicleid}
-                        onselectedvehicle={(id) => setselectvehicleid(id)}
+                        onselectedvehicle={(id, license_plate) => setselectvehicleid(id, license_plate)}
+                        onEdit={(e) => EditVehicle(e)}
+                        onDelete={(id) => onDeleteVehicle(id)}
                     ></Vehicle>
                 }}
             />
@@ -70,6 +92,7 @@ const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAd
 }
 export function TelaHome({ navigation }) {
     const [loading, setloading] = useState(false)
+    const waiting = (ms) => new Promise(resolve => setTimeout(resolve, ms))
     const navigate = useNavigation()
     const { user } = useContext(AuthContext)
     const [mecanicos, setmecanicos] = useState([])
@@ -80,11 +103,10 @@ export function TelaHome({ navigation }) {
     const [license_plate, setlicense_plate] = useState([])
     const [colorcar, setcolorcar] = useState([])
     const [selectvehicleid, setselectvehicleid] = useState('')
+    const hasnovehicle = vehicle.length == 0
+    const isLocked = selectvehicleid === '' || hasnovehicle;
     const { width } = Dimensions.get("window");
     const CARD_WIDTH = (width - 48) / 2;
-    const awaiting = (ms) => new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("TIMEOUT_ESTOURADO")), ms)
-    );
     const {
         id_selectmecanico, setidselectmecanico,
         name_selectmecanico, setname_selectmecanico,
@@ -95,16 +117,17 @@ export function TelaHome({ navigation }) {
     function ClickAddVehicle() {
         navigation.navigate("vehicle")
     }
-    async function ClickService(id_service) {
+    async function ClickService(id_service, service) {
+        const vehicles = vehicle.find(v => (v.id) === selectvehicleid)
         setloading(true)
         try {
-            const res = await Promise.race([
-                api.get(`/servicesmecanicos/${id_service}`),
-                await awaiting(5000)
-            ])
             setloading(false)
-            setmecanicos(res.data)
-            console.log(res.data)
+            navigation.navigate('mecanicos', {
+                id_service: id_service,
+                service: service,
+                vehicle_model: vehicles.model,
+                license_plate: vehicles.license_plate
+            })
 
         } catch (error) {
             setloading(false)
@@ -122,11 +145,11 @@ export function TelaHome({ navigation }) {
         }
     }
     async function LoadVehicleClients() {
+
         try {
             const res = await api.post(`/vehicle/searchvehicle/${user.id_user}`)
-            setvehicle(res.data)
             if (res.data && res.data.length > 0) {
-                // console.log(res.data[0].id || res.data[0].id)
+                setvehicle(res.data)
             }
             setbrand(res.data.brand)
             setmodel(res.data.model)
@@ -134,6 +157,23 @@ export function TelaHome({ navigation }) {
             setcolorcar(res.data.color)
         } catch (error) {
             console.log(error.response.data)
+        }
+    }
+    async function DesvincularVehicle(id) {
+        try {
+            setloading(true)
+            await waiting(2000)
+            const res = await api.delete(`/vehicle/clientdelete/${id}`)
+            if(String(selectvehicleid) === String(selectvehicleid)){
+                setselectvehicleid('')
+            }
+            setvehicle(prevehi => prevehi.filter(v=> String(v.id) !== String(id)))
+            await LoadVehicleClients()
+
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setloading(false)
         }
     }
     useFocusEffect(
@@ -144,41 +184,87 @@ export function TelaHome({ navigation }) {
     );
 
     return (
-        <SafeAreaView style={styles.safearea}>
+        <SafeAreaView style={styles.safearea, { flex: 1 }}>
             <Loading visible={loading}></Loading>
-            <FlatList
-                data={Array.isArray(services) ? services.slice(0, 4) : []}
-                keyExtractor={(doc) => doc.id_service}
-                numColumns={2}
-                columnWrapperStyle={styles.columnWrapper}
-                contentContainerStyle={styles.gridContainer}
-                showsHorizontalScrollIndicator={false}
-                ListHeaderComponent={
-                    <>
-                        <RenderHeader
-                            vehicle={vehicle}
-                            user={user}
-                            selectvehicleid={selectvehicleid}
-                            setselectvehicleid={setselectvehicleid}
-                            onAddVechicle={ClickAddVehicle}
-                        >
-                        </RenderHeader>
-                        <Text style={styles.sectionTitle}>Selecione seu Servico</Text>
+            <View style={{ flex: 1, width: `100%` }}>
+                <FlatList
+                    data={Array.isArray(services) ? services.slice(0, 4) : []}
+                    keyExtractor={(doc) => doc.id_service}
+                    numColumns={2}
+                    extraData={vehicle.length}
+                    columnWrapperStyle={styles.columnWrapper}
+                    contentContainerStyle={styles.gridContainer}
+                    showsHorizontalScrollIndicator={false}
+                    ListHeaderComponent={
+                        <>
+                            <RenderHeader
+                                vehicle={vehicle}
+                                user={user}
+                                selectvehicleid={selectvehicleid}
+                                setselectvehicleid={setselectvehicleid}
+                                onAddVechicle={ClickAddVehicle}
+                                onDeleteVehicle={DesvincularVehicle}
+                            >
+                            </RenderHeader>
+                            <Text style={styles.sectionTitle}>Selecione seu Servico</Text>
 
-                    </>
-                }
-                renderItem={({ item }) => {
-                    return <MeetService
-                        id_service={item.id_service}
-                        id_icon={item.icone_id}
-                        service={item.service}
-                        description={item.description}
-                        card_width={CARD_WIDTH}
-                        onPress={() => ClickService(item.id_service)}
-                    ></MeetService>
-                }}
-            ></FlatList>
+                        </>
+                    }
+                    renderItem={({ item }) => {
+                        return (
+                            <MeetService
+                                id_service={item.id_service}
+                                id_icon={item.icone_id}
+                                service={item.service}
+                                description={item.description}
+                                card_width={CARD_WIDTH}
+                                onPress={(id, service) => !isLocked && ClickService(id, service)}
+                            ></MeetService>
 
-        </SafeAreaView>
+                        )
+                    }}
+                ></FlatList>
+                {isLocked && (
+                    <BlurView
+                        intensity={25}
+                        tint="light"
+                        style={styles.absoluteOverlay}
+                    >
+                        <View style={styles.alertCard}>
+                            <View style={styles.rowHeader}>
+                                <MaterialCommunityIcons
+                                    name={hasnovehicle ? 'car-electric' : 'car-cog'}
+                                    size={28}
+                                    color='#002F6C'
+                                >
+                                </MaterialCommunityIcons>
+                                <Text style={styles.alertText}>
+                                    {hasnovehicle ? 'Nenhum Veiculo' : 'Atencao'}
+                                </Text>
+                            </View>
+                            <Text style={styles.alertText}>
+                                {hasnovehicle ?
+                                    'Voce precisa cadastrar um veiculo antes de solicitar ou visualizar' :
+                                    'Selecionar um dos seus carros acima para liberar os servicos'}
+                            </Text>
+                            {hasnovehicle && (
+                                <TouchableOpacity
+                                    style={styles.actionButton}
+                                    onPress={ClickAddVehicle}
+                                >
+                                    <MaterialCommunityIcons
+                                        name='car-info'
+                                        size={20}
+                                        color='#FFFFFF'
+                                    ></MaterialCommunityIcons>
+                                    <Text style={styles.actionButtonText}>Cadastrar Primeiro Carro</Text>
+                                </TouchableOpacity>
+                            )}
+                        </View>
+                    </BlurView>
+                )}
+            </View>
+
+        </SafeAreaView >
     )
 }

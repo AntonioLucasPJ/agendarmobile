@@ -12,16 +12,16 @@ import { ModalCustom } from '../../components/modalcustom/index.jsx';
 import { BiBorderAll } from 'react-icons/bi';
 import { useNavigation } from '@react-navigation/native';
 
-export function TelaCadastroVeiculos() {
-
+export function TelaCadastroVeiculos({ route }) {
     const navigation = useNavigation()
+    const dadosveiculos = route.params?.dadosveiculos; 
     const [brands, setbrands] = useState([])
     const [models, setmodels] = useState([])
-    const [selectedBrand, setselectedBrand] = useState(null)
-    const [selectedModel, setselectedModel] = useState(null)
-    const [plate, setplate] = useState('')
+    const [selectedBrand, setselectedBrand] = useState(dadosveiculos?.brand || '')
+    const [selectedModel, setselectedModel] = useState(dadosveiculos?.model || '')
+    const [plate, setplate] = useState(dadosveiculos?.license_plate || '')
     const [modalCoresVisible, setmodalCoresVisible] = useState(false)
-    const [color, setcolor] = useState('')
+    const [color, setcolor] = useState(dadosveiculos?.color || '')
     const [loading, setloading] = useState(false)
     const [loadinModels, setloadinModels] = useState(true)
     const [statusapi, setstatusapi] = useState('')
@@ -106,17 +106,40 @@ export function TelaCadastroVeiculos() {
         }
     }, [selectedBrand])
     async function CreateSingVehicle() {
+        console.log('teste')
         const dadosapi = {
             user_id: user.id_user,
             model_id: selectedModel,
             car_license_plate: plate,
             color: color
         }
-        
+
         try {
             setloading(true)
             await waiting(2000)
             const res = await api.post('/vehicle/singupvehicle', dadosapi)
+            setstatusapi(res.status)
+            setmsgnotification(res.data.message)
+            setTimeout(() => {
+                setactivenotification(!activenotification)
+                navigation.goBack()
+            }, [1000])
+
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setloading(false)
+        }
+    }
+    async function EditVehicle() {
+        const dadosapi = {
+            license_plate: plate,
+            color: color
+        }
+        try {
+            setloading(true)
+            await waiting(2000)
+            const res = await api.put(`/vehicle/clientedit/${dadosveiculos.id_vehicle}`, dadosapi)
             setstatusapi(res.status)
             setmsgnotification(res.data.message)
             setTimeout(() => {
@@ -141,23 +164,23 @@ export function TelaCadastroVeiculos() {
                     intensity={30}
                     tint='light'
                     style={{
-                        position:'absolute',
-                        top:0,
-                        left:0,
-                        right:0,
-                        bottom:0,
-                        zIndex:99
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        zIndex: 99
                     }}
                 >
                 </BlurView>
             )}
             {activenotification ? (
                 <View style={{
-                    position:'absolute',
-                    width:'100%',
-                    height:'100%',
-                    justifyContent:"center",
-                    zIndex:100
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: "center",
+                    zIndex: 100
                 }}>
                     <ModalCustom statusapi={statusapi} msgmodal={msgnotification} onClose={() => CleanScreen()}></ModalCustom>
                 </View>
@@ -300,13 +323,13 @@ export function TelaCadastroVeiculos() {
             <TouchableOpacity
                 style={[styles.saveButton, !formvalid && styles.saveButtonDisabled]}
                 disabled={!formvalid}
-                onPress={() => CreateSingVehicle()}
+                onPress={dadosveiculos != undefined ? () => EditVehicle() : () => CreateSingVehicle()}
             >
                 {loading ? (
                     <ActivityIndicator color='#FFFFFF'></ActivityIndicator>
                 ) : (
                     <View style={styles.buttonContent}>
-                        <Text style={styles.saveButtonText}>Concluir Cadastro</Text>
+                        <Text style={styles.saveButtonText}>{dadosveiculos != undefined ? 'Editar cadastro' : 'Concluir cadastro'}</Text>
                         <Ionicons name='checkmark-circle' size={20} color='#FFFFFF'></Ionicons>
                     </View>
                 )}

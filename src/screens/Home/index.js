@@ -2,6 +2,64 @@ import { StyleSheet } from "react-native";
 import { color } from "../../constants/theme";
 
 export const styles = StyleSheet.create({
+    absoluteOverlay: {
+        position: 'absolute',
+        // O segredo está aqui: começamos o borrão a partir de 260px do topo 
+        // para cobrir apenas os serviços e deixar o carrossel de carros clicável livremente!
+        top: 350, 
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 24,
+        backgroundColor:'rgba(240,240,240,0.4)'
+    },
+    alertCard: {
+        backgroundColor: '#ffffff', // Fundo branco levemente transparente
+        padding: 20,
+        borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 4, // Sombra no Android
+        shadowColor: '#000', // Sombra no iOS
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+        borderWidth: 1,
+        borderColor: 'rgba(0, 47, 108, 0.1)'
+    },
+    alertText: {
+        color: '#4A5568',
+        fontSize: 14,
+        fontWeight: '600',
+        textAlign: 'center',
+        lineHeight: 20,
+    },
+    rowHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 8,
+        gap: 8, // Espaçamento elegante entre o ícone e o título
+    },
+    actionButton: {
+        flexDirection: 'row',
+        backgroundColor: '#002F6C',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderRadius: 10,
+        marginTop: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 8,
+        width: '100%',
+        elevation: 2,
+    },
+    actionButtonText: {
+        color: '#FFFFFF',
+        fontSize: 14,
+        fontWeight: '700',
+    },
     safearea: {
         flex: 1,
         backgroundColor: '#F1F5F9'

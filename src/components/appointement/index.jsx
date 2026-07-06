@@ -9,7 +9,14 @@ import api from "../../constants/api.js";
 export function Agendamento(props) {
     const { user } = useContext(AuthContext)
     const dt = new Date(props.booking_date + 'T' + props.booking_hour)
+    function ValidateStatus(status){
 
+        if(status == 'P'){
+            return 'Pendente'
+        }else if (status == 'C'){
+            return 'Concluido'
+        }
+    }
     return (
         <View key={props.idappointment} style={styles.card}>
             <View style={styles.topRow}>
@@ -39,8 +46,9 @@ export function Agendamento(props) {
             style={styles.bottomRow}>
                 <View
                 style={styles.priceBadge}>
+                    {props.status =='P'}
                     <Text
-                    style={styles.priceText}> R$ {props.price}</Text>
+                    style={styles.priceText}>{ValidateStatus(props.status)}</Text>
                 </View>
                 <TouchableOpacity
                 onPress={()=> props.onPress(props.idappointment)}

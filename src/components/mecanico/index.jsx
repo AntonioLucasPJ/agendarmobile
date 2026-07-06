@@ -5,6 +5,14 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { PiOrange } from "react-icons/pi";
 import { useEffect } from "react";
 export function Mecanico(props) {
+    function TituloProfissiona() {
+        if (props.titulo_profissional == 1) {
+            return 'Mecanico Especializado'
+        } else if (props.titulo_profissional == 2) {
+            return 'Mecanico Geral'
+        }
+    }
+
     return (
         <View style={styles.card}>
             <Image
@@ -12,7 +20,7 @@ export function Mecanico(props) {
                 style={styles.avatar}
             />
             <View style={styles.infoContainer}>
-                <Text style={styles.titleText}>{props.titulo_profissional}</Text>
+                <Text style={styles.titleText}>{TituloProfissiona()}</Text>
                 <Text style={styles.specialtyText}>{props.especiality}</Text>
                 <View style={styles.headerRow}>
                     <Text style={styles.nameText}>{props.name}</Text>
@@ -32,9 +40,9 @@ export function Mecanico(props) {
             </View>
             <View style={styles.rightContainer}>
                 <View style={styles.expBadge}>
-                    <Text style={styles.expText}>{props.experiencia || '15+anos'}</Text>
+                    <Text style={styles.expText}>{props.experiencia +' anos' || 'Experiencia nao indentificada'}</Text>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => props.onPress(props.id_mecanico,props.name, props.especiality, props.icon,props.avatar)}>
+                <TouchableOpacity style={styles.button} onPress={() => props.onPress(props.id_mecanico)}>
                     <Text style={styles.buttonText}>Selecionar</Text>
                 </TouchableOpacity>
             </View>

@@ -44,7 +44,7 @@ export function Calendary() {
                         servico={item.service}
                         mecanico={item.mecanico}
                         especialidade={item.especializacao}
-                        price={item.price}
+                        status={item.status}
                         imgcalendar={icon.calendar}
                         booking_date={item.booking_date}
                         imgwatch={icon.relogio}
