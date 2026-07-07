@@ -6,14 +6,14 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         // O segredo está aqui: começamos o borrão a partir de 260px do topo 
         // para cobrir apenas os serviços e deixar o carrossel de carros clicável livremente!
-        top: 350, 
+        top: 350,
         left: 0,
         right: 0,
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 24,
-        backgroundColor:'rgba(240,240,240,0.4)'
+        backgroundColor: 'rgba(240,240,242,0.4)'
     },
     alertCard: {
         backgroundColor: '#ffffff', // Fundo branco levemente transparente
@@ -65,13 +65,12 @@ export const styles = StyleSheet.create({
         backgroundColor: '#F1F5F9'
     },
     columnWrapper: {
-        flexDirection: 'row',
         justifyContent: 'space-between', // Força os dois cards a irem para as extremidades
         marginBottom: 16,                // Afasta a linha de cima da de baixo
     },
     gridContainer: {
         paddingHorizontal: 16,           // Margem das bordas do celular
-        paddingBottom: 24,
+        backgroundColor: 'transparent'
     },
     headerContainer: {
         paddingHorizontal: 16,
@@ -97,7 +96,8 @@ export const styles = StyleSheet.create({
         fontWeight: '700',
         color: '#334155',
         letterSpacing: 0.3,
-        marginBottom: 12,
+        marginTop: 10,
+        marginBottom: 1,
         textTransform: 'uppercase',
     },
     carouselContainer: {
@@ -133,7 +133,7 @@ export const styles = StyleSheet.create({
         width: 300,
         backgroundColor: '#0F172A', // Slate 900 (Fundo escuro premium ultra moderno)
         borderRadius: 20,
-        padding: 16,
+        padding: 10,
         marginRight: 14,
         shadowColor: '#0F172A',
         shadowOffset: { width: 0, height: 6 },
@@ -286,5 +286,25 @@ export const styles = StyleSheet.create({
         marginTop: 6,
         marginBottom: 16,
         lineHeight: 18,
+    },
+    containerBolinhas: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 16,
+        marginBottom: 32,
+    },
+    bolinha: {
+        height: 8,
+        borderRadius: 4,
+        marginHorizontal: 4,
+    },
+    bolinhaAtiva: {
+        width: 20, // Efeito oval para indicar o ponto selecionado
+        backgroundColor: '#002F6C',
+    },
+    bolinhaInativa: {
+        width: 8,
+        backgroundColor: '#cbd5e1', // Cinza clarinho apagado
     },
 })

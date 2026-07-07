@@ -87,6 +87,8 @@ const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAd
                     ></Vehicle>
                 }}
             />
+            <Text style={styles.sectionTitle}>Selecione seu Servico</Text>
+
         </View >
     )
 }
@@ -107,6 +109,7 @@ export function TelaHome({ navigation }) {
     const isLocked = selectvehicleid === '' || hasnovehicle;
     const { width } = Dimensions.get("window");
     const CARD_WIDTH = (width - 48) / 2;
+    const [paginaAtiva, setpaginaAtiva] = useState(0)
     const {
         id_selectmecanico, setidselectmecanico,
         name_selectmecanico, setname_selectmecanico,
@@ -164,10 +167,10 @@ export function TelaHome({ navigation }) {
             setloading(true)
             await waiting(2000)
             const res = await api.delete(`/vehicle/clientdelete/${id}`)
-            if(String(selectvehicleid) === String(selectvehicleid)){
+            if (String(selectvehicleid) === String(id)) {
                 setselectvehicleid('')
             }
-            setvehicle(prevehi => prevehi.filter(v=> String(v.id) !== String(id)))
+            setvehicle(prevehi => prevehi.filter(v => String(v.id) !== String(id)))
             await LoadVehicleClients()
 
         } catch (error) {
@@ -182,48 +185,97 @@ export function TelaHome({ navigation }) {
             LoadVehicleClients()
         }, [])
     );
+    const formatarDadosEmPaginas = (lista, tamanhoPagina) => {
+        if (!Array.isArray(lista)) return [];
+        const paginas = [];
+        for (let i = 0; i < lista.length; i += tamanhoPagina) {
+            paginas.push(lista.slice(i, i + tamanhoPagina));
+        }
+        return paginas;
+    };
 
+    const dadosPaginados = formatarDadosEmPaginas(services, 4);
     return (
-        <SafeAreaView style={styles.safearea, { flex: 1 }}>
+        <SafeAreaView style={[styles.safearea, { flex: 1, backgroundColor: '#f8fafc' }]}>
             <Loading visible={loading}></Loading>
-            <View style={{ flex: 1, width: `100%` }}>
-                <FlatList
-                    data={Array.isArray(services) ? services.slice(0, 4) : []}
-                    keyExtractor={(doc) => doc.id_service}
-                    numColumns={2}
-                    extraData={vehicle.length}
-                    columnWrapperStyle={styles.columnWrapper}
-                    contentContainerStyle={styles.gridContainer}
-                    showsHorizontalScrollIndicator={false}
-                    ListHeaderComponent={
-                        <>
-                            <RenderHeader
-                                vehicle={vehicle}
-                                user={user}
-                                selectvehicleid={selectvehicleid}
-                                setselectvehicleid={setselectvehicleid}
-                                onAddVechicle={ClickAddVehicle}
-                                onDeleteVehicle={DesvincularVehicle}
-                            >
-                            </RenderHeader>
-                            <Text style={styles.sectionTitle}>Selecione seu Servico</Text>
+            <ScrollView style={{ flex: 1 }} showsHorizontalScrollIndicator={false}>
+                <RenderHeader
+                    vehicle={vehicle}
+                    user={user}
+                    selectvehicleid={selectvehicleid}
+                    setselectvehicleid={setselectvehicleid}
+                    onAddVechicle={ClickAddVehicle}
+                    onDeleteVehicle={DesvincularVehicle}
+                >
+                </RenderHeader>
+                <View style={{ height: width > 600 ? 260 : 440,marginVertical:12,width:'100%' }}>
+                    <FlatList
+                        data={dadosPaginados}
+                        keyExtractor={(_, index) => 'pagina_' + index}
+                        horizontal={true}
+                        pagingEnabled={true}
+                        extraData={vehicle.length}
+                        contentContainerStyle={styles.gridContainer}
+                        showsHorizontalScrollIndicator={false}
+                        nestedScrollEnabled={true}
+                        scrollEventThrottle={16}
+                        onScroll={(e) => {
+                            const xOffset = e.nativeEvent.contentInset.x;
+                            const largurapagina = e.nativeEvent.layoutMeasurement.width || width
+                            const pagina = Math.round(xOffset / width)
+                            setpaginaAtiva(pagina)
+                        }}
+                        renderItem={({ item: servicosDaPagina }) => {
+                            return (
+                                <View
+                                    style={{
+                                        width: width > 600 ? width - 32 : width,
+                                        flexDirection: 'row',
+                                        flexWrap: "wrap",
+                                        paddingHorizontal: width > 600 ? 0 : 8,
+                                        height: width > 600 ? 280 : 380,
+                                        alignItems: 'flex-start'
+                                    }}>
+                                    {servicosDaPagina.map((item) => (
+                                        <View
+                                            key={item.id_service}
+                                            style={{
+                                                width: width > 600 ? '25%' : '50%',
+                                                padding: 6
+                                            }}>
+                                            <MeetService
+                                                id_service={item.id_service}
+                                                id_icon={item.icone_id}
+                                                service={item.service}
+                                                description={item.description}
+                                                card_width='100%'
+                                                onPress={(id, service) => !isLocked && ClickService(id, service)}
+                                            ></MeetService>
+                                        </View>
+                                    ))}
 
-                        </>
-                    }
-                    renderItem={({ item }) => {
-                        return (
-                            <MeetService
-                                id_service={item.id_service}
-                                id_icon={item.icone_id}
-                                service={item.service}
-                                description={item.description}
-                                card_width={CARD_WIDTH}
-                                onPress={(id, service) => !isLocked && ClickService(id, service)}
-                            ></MeetService>
+                                </View>
 
-                        )
-                    }}
-                ></FlatList>
+
+                            )
+                        }}
+                    ></FlatList>
+                    {dadosPaginados.length > 1 && (
+                        <View style={styles.containerBolinhas, { marginTop: 8, marginBottom: 16 }}>
+                            {dadosPaginados.map((_, index) => (
+                                <View
+                                    key={index}
+                                    style={[
+                                        styles.bolinha,
+                                        paginaAtiva === index ? styles.bolinhaAtiva : styles.bolinhaInativa
+                                    ]}>
+
+                                </View>
+                            ))}
+                        </View>
+                    )}
+                </View>
+
                 {isLocked && (
                     <BlurView
                         intensity={25}
@@ -263,7 +315,7 @@ export function TelaHome({ navigation }) {
                         </View>
                     </BlurView>
                 )}
-            </View>
+            </ScrollView>
 
         </SafeAreaView >
     )

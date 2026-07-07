@@ -9,13 +9,17 @@ import { useEffect } from "react";
 export function MeetService(props) {
     const MapeamentosIcones = ({ nomeicone }) => {
         const name = nomeicone?.toLowerCase()
-        switch(name){
+        switch (name) {
             case "lightning-bolt-outline":
-                return <FontAwesome name="gear" size={40} color='#334155'></FontAwesome>
-    
+                return <MaterialCommunityIcons name={name} size={25} color='#2b4c7e' />
+            case "car-brake-abs":
+                return <MaterialCommunityIcons name={name} size={25} color='#2b4c7e'></MaterialCommunityIcons>
+            case "engine-outline":
+                return <MaterialCommunityIcons name={name} size={25} color='#2b4c7e'></MaterialCommunityIcons>
+
             default:
-                return <FontAwesome name="gear" size={40} color="#64748b" />;
-            }
+                return <MaterialCommunityIcons name="cog" size={25} color="#64748b" />;
+        }
 
     }
     const formatarvalor = (valor) => {
@@ -29,9 +33,7 @@ export function MeetService(props) {
         <View style={[styles.serviceCard, { width: props.card_width }]}>
             <View style={styles.cubeGrid}>
                 <View style={styles.iconContainerCube}>
-                    {/* renderServiceIcon tratando 'engine', 'electric', etc. */}
                     <MapeamentosIcones nomeicone={props.id_icon}></MapeamentosIcones>
-
                 </View>
                 <View style={styles.textContainerCube}>
                     <Text style={styles.serviceNameCube} numberOfLines={2}>{props.service}</Text>
@@ -41,7 +43,7 @@ export function MeetService(props) {
                         key={props.id_service.toString()}
                         style={[styles.cubeCard, { width: props.CARD_WIDTH }]}
                         activeOpacity={0.8}
-                        onPress={() => props.onPress(props.id_service,props.service)}
+                        onPress={() => props.onPress(props.id_service, props.service)}
                     >
                         <LinearGradient
                             colors={['#1e40af', '#ea580c']}

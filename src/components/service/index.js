@@ -18,7 +18,8 @@ export const styles = StyleSheet.create({
         height: 160, // Altura fixa para deixá-lo quadradinho
         backgroundColor: '#FFFFFF',
         borderRadius: 16,
-        padding: 12,
+        padding: 10,
+        marginTop:10,
         alignItems: 'center',
         justifyContent: 'space-between',
         // Sombras
@@ -32,19 +33,19 @@ export const styles = StyleSheet.create({
     },
     iconContainerCube: {
         flexDirection:'row',
-        width: 50,
-        height: 50,
-        borderRadius: 22,
-        backgroundColor: '#F1F5F9',
+        width:'60',
+        height:'60',
+        backgroundColor: 'transparent',
         alignItems: 'center',
         justifyContent: 'center',
     },
     textContainerCube: {
+        justifyContent:'space-between',
         alignItems: 'center',
         width: '100%',
     },
     serviceNameCube: {
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: '600',
         color: '#334155',
         textAlign: 'center',
@@ -64,8 +65,9 @@ export const styles = StyleSheet.create({
         color: '#ea580c',
     },
     btnAgendarCube: {
-        paddingHorizontal: 20,
-        paddingVertical: 6,
+        justifyContent:`space-between`,
+        paddingHorizontal: 25,
+        paddingVertical:10,
         borderRadius: 12,
     },
     btnTextCube: {
