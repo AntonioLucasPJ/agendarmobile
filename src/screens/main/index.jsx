@@ -35,6 +35,7 @@ export function Main() {
                 options={{
                     headerTitleAlign: 'center',
                     headerTitle: 'Meus Agendamentos',
+                    tabBarShowLabel:false,
                     tabBarIcon: ({ focused }) => {
                         return <Ionicons
                             name={focused ? "calendar": "calendar-outline"}
@@ -54,6 +55,7 @@ export function Main() {
                 options={{
                     headerTitleAlign: "center",
                     tabBarShowLabel: false,
+                    headerShown:false,
                     tabBarIcon: ({ focused }) => {
                         return (
                         <Ionicons

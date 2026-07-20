@@ -1,0 +1,297 @@
+import React, { useContext, useState } from react;
+import { View, Text, ScrollView, TouchableOpacity, Image, Alert, StyleSheet } from react-native;
+import { SafeAreaView } from react-native-safe-area-context;
+import { MaterialCommunityIcons } from '@expovector-icons';
+import { useNavigation } from @react-navigationnative;
+import { AuthContext } from ....contextsauth.js;
+import { LocationModal } from ....componentsLocationindex.jsx;
+import Loading from ....componentsloadingindex.jsx;
+import api from ....constantsapi.js;
+
+export function TelaPerfil() {
+    const { user, setUser } = useContext(AuthContext);  Ideal ter o setUser para atualizar o estado global se mudar o endereço
+    const navigation = useNavigation();
+    const [loading, setLoading] = useState(false);
+    const [showAddressModal, setShowAddressModal] = useState(false);
+
+     Função para deslogar do aplicativo
+    const handleLogout = () = {
+        Alert.alert(Sair, Deseja realmente sair da sua conta, [
+            { text Cancelar, style cancel },
+            { 
+                text Sair, 
+                style destructive, 
+                onPress () = {
+                     Aqui entra sua função de logout do AuthContext (ex logout())
+                     navigation.replace('login');
+                } 
+            }
+        ]);
+    };
+
+     Callback executado quando o endereço é atualizado pelo Modal
+    const handleAddressUpdated = (newAddress) = {
+         Atualiza visualmente o estado do usuário na aplicação se necessário
+        if(setUser) {
+            setUser(prev = ({
+                ...prev,
+                rua newAddress.rua,
+                bairro newAddress.bairro,
+                cidade newAddress.cidade,
+                cep newAddress.cep
+            }));
+        }
+        Alert.alert(Sucesso, Endereço atualizado com sucesso!);
+    };
+
+    return (
+        SafeAreaView style={styles.safearea}
+            Loading visible={loading} 
+
+            { HEADER DA TELA }
+            View style={styles.header}
+                Text style={styles.headerTitle}Meu PerfilText
+            View
+
+            ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}
+                
+                { CARD DE INFORMAÇÕES PESSOAIS }
+                View style={styles.profileCard}
+                    View style={styles.avatarCircle}
+                        MaterialCommunityIcons name=account size={45} color=#002F6C 
+                    View
+                    View style={styles.profileInfo}
+                        Text style={styles.userName}{user.name  Nome do Usuário}Text
+                        Text style={styles.userEmail}{user.email  usuario@email.com}Text
+                    View
+                View
+
+                { SEÇÃO DE ENDEREÇO (INTEGRADO AO SEU MODAL) }
+                Text style={styles.sectionTitle}Localização CadastradaText
+                View style={styles.addressBox}
+                    View style={styles.addressHeader}
+                        MaterialCommunityIcons name=map-marker-radius size={24} color=#D9531E 
+                        Text style={styles.addressTitle}Endereço de SocorroText
+                    View
+                    
+                    {user.rua  (
+                        View style={styles.addressDetails}
+                            Text style={styles.addressText}Text style={styles.bold}RuaText {user.rua}Text
+                            Text style={styles.addressText}Text style={styles.bold}BairroText {user.bairro}Text
+                            Text style={styles.addressText}Text style={styles.bold}CidadeText {user.cidade} - CEP {user.cep}Text
+                        View
+                    )  (
+                        Text style={styles.noAddressText}Nenhum endereço configurado por GPS ou manualmente.Text
+                    )}
+
+                    TouchableOpacity 
+                        style={styles.editAddressButton}
+                        onPress={() = setShowAddressModal(true)}
+                    
+                        MaterialCommunityIcons name=map-marker-edit size={20} color=#FFFFFF 
+                        Text style={styles.editAddressButtonText}
+                            {user.rua  Alterar Endereço  Configurar Endereço}
+                        Text
+                    TouchableOpacity
+                View
+
+                { SEÇÃO DE MENUS E CONFIGURAÇÕES }
+                Text style={styles.sectionTitle}Atalhos RápidosText
+                
+                View style={styles.menuContainer}
+                    TouchableOpacity 
+                        style={styles.menuItem} 
+                        onPress={() = navigation.navigate(vehicle)}
+                    
+                        View style={styles.menuItemLeft}
+                            MaterialCommunityIcons name=car-cog size={24} color=#002F6C 
+                            Text style={styles.menuItemText}Gerenciar Meus VeículosText
+                        View
+                        MaterialCommunityIcons name=chevron-right size={24} color=#64748B 
+                    TouchableOpacity
+
+                    TouchableOpacity style={styles.menuItem}
+                        View style={styles.menuItemLeft}
+                            MaterialCommunityIcons name=history size={24} color=#002F6C 
+                            Text style={styles.menuItemText}Histórico de ChamadosText
+                        View
+                        MaterialCommunityIcons name=chevron-right size={24} color=#64748B 
+                    TouchableOpacity
+
+                    TouchableOpacity style={[styles.menuItem, styles.lastMenuItem]} onPress={handleLogout}
+                        View style={styles.menuItemLeft}
+                            MaterialCommunityIcons name=logout size={24} color=#EF4444 
+                            Text style={[styles.menuItemText, { color '#EF4444' }]}Sair da ContaText
+                        View
+                        MaterialCommunityIcons name=chevron-right size={24} color=#EF4444 
+                    TouchableOpacity
+                View
+
+                Text style={styles.versionText}Versão 1.0.0Text
+            ScrollView
+
+            { REUTILIZANDO O SEU COMPONENTE DE LOCALIZAÇÃO }
+            LocationModal 
+                visible={showAddressModal}
+                onClose={() = setShowAddressModal(false)}
+                onAddresSaved={handleAddressUpdated}
+            
+        SafeAreaView
+    );
+}
+
+const styles = StyleSheet.create({
+    safearea {
+        flex 1,
+        backgroundColor '#f8fafc'
+    },
+    header {
+        paddingHorizontal 24,
+        paddingVertical 16,
+        backgroundColor '#FFFFFF',
+        borderBottomWidth 1,
+        borderBottomColor '#E2E8F0',
+    },
+    headerTitle {
+        fontSize 22,
+        fontWeight 'bold',
+        color '#002F6C',
+    },
+    scrollContent {
+        padding 24,
+        paddingBottom 40
+    },
+    profileCard {
+        flexDirection 'row',
+        backgroundColor '#FFFFFF',
+        padding 20,
+        borderRadius 16,
+        alignItems 'center',
+        marginBottom 28,
+        shadowColor '#000',
+        shadowOffset { width 0, height 2 },
+        shadowOpacity 0.05,
+        shadowRadius 8,
+        elevation 2,
+    },
+    avatarCircle {
+        width 70,
+        height 70,
+        borderRadius 35,
+        backgroundColor '#F0F4F8',
+        justifyContent 'center',
+        alignItems 'center',
+        marginRight 16,
+    },
+    profileInfo {
+        flex 1,
+    },
+    userName {
+        fontSize 18,
+        fontWeight 'bold',
+        color '#1E293B',
+        marginBottom 4,
+    },
+    userEmail {
+        fontSize 14,
+        color '#64748B',
+    },
+    sectionTitle {
+        fontSize 14,
+        fontWeight '700',
+        color '#002F6C',
+        textTransform 'uppercase',
+        letterSpacing 0.5,
+        marginBottom 12,
+    },
+    addressBox {
+        backgroundColor '#FFFFFF',
+        borderRadius 16,
+        padding 20,
+        marginBottom 28,
+        borderWidth 1,
+        borderBottomWidth 3,
+        borderColor '#E2E8F0',
+    },
+    addressHeader {
+        flexDirection 'row',
+        alignItems 'center',
+        marginBottom 12,
+    },
+    addressTitle {
+        fontSize 16,
+        fontWeight 'bold',
+        color '#1E293B',
+        marginLeft 8,
+    },
+    addressDetails {
+        marginBottom 16,
+    },
+    addressText {
+        fontSize 14,
+        color '#475569',
+        marginBottom 4,
+    },
+    bold {
+        fontWeight '600',
+        color '#1E293B',
+    },
+    noAddressText {
+        fontSize 14,
+        color '#64748B',
+        fontStyle 'italic',
+        marginBottom 16,
+    },
+    editAddressButton {
+        flexDirection 'row',
+        backgroundColor '#002F6C',
+        paddingVertical 12,
+        borderRadius 12,
+        justifyContent 'center',
+        alignItems 'center',
+    },
+    editAddressButtonText {
+        color '#FFFFFF',
+        fontSize 14,
+        fontWeight 'bold',
+        marginLeft 8,
+    },
+    menuContainer {
+        backgroundColor '#FFFFFF',
+        borderRadius 16,
+        overflow 'hidden',
+        shadowColor '#000',
+        shadowOffset { width 0, height 2 },
+        shadowOpacity 0.05,
+        shadowRadius 8,
+        elevation 2,
+    },
+    menuItem {
+        flexDirection 'row',
+        justifyContent 'space-between',
+        alignItems 'center',
+        paddingVertical 16,
+        paddingHorizontal 20,
+        borderBottomWidth 1,
+        borderBottomColor '#F1F5F9',
+    },
+    lastMenuItem {
+        borderBottomWidth 0,
+    },
+    menuItemLeft {
+        flexDirection 'row',
+        alignItems 'center',
+    },
+    menuItemText {
+        fontSize 15,
+        fontWeight '500',
+        color '#334155',
+        marginLeft 12,
+    },
+    versionText {
+        textAlign 'center',
+        color '#94A3B8',
+        fontSize 12,
+        marginTop 32,
+    },
+});
