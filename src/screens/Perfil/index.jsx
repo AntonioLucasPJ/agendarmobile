@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import profilesteste from './img/carton.jpg'
 import { styles } from './index.js'
 import { AuthContext } from '../../contexts/auth.js'
-import { useContext, useEffect, useState } from 'react'
+import { use, useContext, useEffect, useState } from 'react'
 import { Button } from '../../components/button/button.jsx'
 import api from '../../constants/api.js'
 import { Key } from 'lucide-react-native'
@@ -117,8 +117,8 @@ export function Perfil() {
                             <Text style={styles.inputLabel}>Nome</Text>
                             <TextInput
                                 style={styles.userNameInput}
-                                value={userName}
-                                onChangeText={setUserName}
+                                value={user.name}
+                                onChangeText={(name)=> setuser({...user,name:name})}
                                 placeholder='Digite seu nome'
                                 autoCorrect={false}
                             ></TextInput>
@@ -126,7 +126,7 @@ export function Perfil() {
                             <TextInput
                                 style={styles.userEmailInput}
                                 value={user.email}
-                                onChangeText={setUserEmail}
+                                onChangeText={(email)=> setuser({...user, email:email })}
                                 placeholder='usuario@gmail.com'
                                 keyboardType='email-address'
                                 autoCapitalize='none'
@@ -136,7 +136,8 @@ export function Perfil() {
                             <TextInput
                                 style={styles.userPhoneInput}
                                 value={user.telefone}
-                                onChangeText={setUserPhone}
+                                maxLength={11}
+                                onChangeText={(telefone)=> setuser({...user, telefone:telefone})}
                                 placeholder='(98) 99999-9999'
                                 keyboardType='phone-pad'
 
@@ -194,7 +195,7 @@ export function Perfil() {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.menuItem, styles.lastMenuItem]}
-                            onPress={()=>handleLogout}
+                            onPress={() => handleLogout}
                         >
                             <View
                                 style={styles.menuItemLeft}
