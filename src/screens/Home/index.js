@@ -4,16 +4,15 @@ import { color } from "../../constants/theme";
 export const styles = StyleSheet.create({
     absoluteOverlay: {
         position: 'absolute',
-        // O segredo está aqui: começamos o borrão a partir de 260px do topo 
-        // para cobrir apenas os serviços e deixar o carrossel de carros clicável livremente!
-        top: 350,
+        top: 0,
         left: 0,
         right: 0,
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 24,
-        backgroundColor: 'rgba(240,240,242,0.4)'
+        backgroundColor: 'rgba(240,240,242,0.4)',
+        zIndex:10
     },
     alertCard: {
         backgroundColor: '#ffffff', // Fundo branco levemente transparente
@@ -74,12 +73,12 @@ export const styles = StyleSheet.create({
     },
     headerContainer: {
         paddingHorizontal: 16,
-        paddingTop: 12,
+        paddingTop: 16,
         backgroundColor: '#F8FAFC', // Fundo de tela levemente acinzentado (estilo iOS)
     },
 
     welcomeRow: {
-        marginBottom: 20,
+        marginBottom: 16,
     },
     welcomeText: {
         fontSize: 24,
@@ -92,12 +91,12 @@ export const styles = StyleSheet.create({
         marginTop: 2,
     },
     sectionTitle: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '700',
         color: '#334155',
         letterSpacing: 0.3,
-        marginTop: 10,
-        marginBottom: 1,
+        marginTop:22,
+        marginBottom: 12,
         textTransform: 'uppercase',
     },
     carouselContainer: {
@@ -133,7 +132,7 @@ export const styles = StyleSheet.create({
         width: 300,
         backgroundColor: '#0F172A', // Slate 900 (Fundo escuro premium ultra moderno)
         borderRadius: 20,
-        padding: 10,
+        padding: 16,
         marginRight: 14,
         shadowColor: '#0F172A',
         shadowOffset: { width: 0, height: 6 },
@@ -148,15 +147,14 @@ export const styles = StyleSheet.create({
         backgroundColor: '#F7FAFC', // Um fundo cinza bem claro e sutil
         borderStyle: 'dashed',  // Deixa a borda pontilhada/tracejada (indica placeholder)
         borderWidth: 2,
-        borderColor: '#CBD5E0', // Cor da borda pontilhada
-        borderRadius: 12,       // Arredondamento idêntico ao do card normal
+        borderColor: '#CBD5E0', 
+        borderRadius: 20, 
         padding: 20,
-        // Centraliza o ícone e o texto perfeitamente no meio do card
         justifyContent: 'center',
         alignItems: 'center',
 
         // Altura idêntica à do seu card de veículo atual para alinhar perfeitamente
-        height: 200, // Ajuste esse valor caso o seu card atual seja maior ou menor
+        height: 160, // Ajuste esse valor caso o seu card atual seja maior ou menor
     },
 
     // 🔥 NOVO: Estilo para o texto dentro do card de adição

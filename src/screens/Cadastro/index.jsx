@@ -19,10 +19,18 @@ function Cadastro(props) {
         email, setsingemail,
         telefone, settelefone,
         password, setsingpassword,
+        statusapi,
         activenotification, setactivenotification,
         msgnotification, setmsgnotification,
         CreateNewUser
     } = useContext(SingupContext)
+    useEffect(()=>{
+        setsinguser("")
+        setcpf("")
+        setsingemail("")
+        settelefone("")
+        setsingpassword("")
+    },[])
     const nomevalido = (user || '').trim().length >= 10;
     const emailvalido = email.includes('@') && email.includes('.');
     const telefonevalido = telefone.trim().length >= 11;
@@ -31,6 +39,7 @@ function Cadastro(props) {
     const handletelefone = (e) => {
         const valorformatado = FormartarTelefone(e)
         settelefone(valorformatado)
+
     }
     function FormartarTelefone(e) {
         return e
@@ -70,7 +79,11 @@ function Cadastro(props) {
                         <Image source={icon.logo} style={styles.logo}></Image>
                         <View style={styles.containerinput}>
                             {activenotification ?
-                                <ModalCustom></ModalCustom>
+                                <ModalCustom
+                                statusapi={statusapi}
+                                msgmodal={msgnotification}
+                                onClose={()=> setactivenotification(!activenotification)}
+                                ></ModalCustom>
                                 : ''
                             }
                             <View style={styles.inputWrapper}>
@@ -83,11 +96,11 @@ function Cadastro(props) {
                             </View>
                             <View style={styles.inputWrapper}>
                                 <Image source={icon.cpf} style={emailvalido ? styles.inputIcon : styles.inputIconDisable}></Image>
-                                <TextInput style={emailvalido ? styles.input : styles.inputDisable} placeholder="CPF" placeholderTextColor={emailvalido ? '#000' : 'rgb(44, 151, 151)'} value={cpf} editable={emailvalido} onChangeText={(e) => handlecpf(e)}></TextInput>
+                                <TextInput style={emailvalido ? styles.input : styles.inputDisable} placeholder="CPF" placeholderTextColor={emailvalido ? '#000' : 'rgb(44, 151, 151)'} value={cpf} editable={emailvalido} keyboardType="numeric" onChangeText={(e) => handlecpf(e)}></TextInput>
                             </View>
                             <View style={styles.inputWrapper}>
                                 <Image source={icon.telefone} style={cpfvalido ? styles.inputIcon : styles.inputIconDisable}></Image>
-                                <TextInput style={cpfvalido ? styles.input : styles.inputDisable} placeholder="(__)_____-____" placeholderTextColor={cpfvalido ? '#000' : 'rgb(44, 151, 151)'} value={telefone} onChangeText={(e) => handletelefone(e)} editable={cpfvalido}></TextInput>
+                                <TextInput style={cpfvalido ? styles.input : styles.inputDisable} placeholder="(__)_____-____" placeholderTextColor={cpfvalido ? '#000' : 'rgb(44, 151, 151)'} keyboardType="numeric" maxLength={15} value={telefone} onChangeText={(e) => handletelefone(e)} editable={cpfvalido}></TextInput>
                             </View>
                             <View style={styles.inputWrapper}>
                                 <Image source={icon.lock} style={telefonevalido ? styles.inputIcon : styles.inputIconDisable}></Image>

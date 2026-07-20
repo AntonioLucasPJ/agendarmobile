@@ -1,4 +1,4 @@
-import { FlatList, Image, Text, View, ScrollView, TouchableOpacity, Dimensions } from "react-native";
+import { FlatList, Image, Text, View, ScrollView, TouchableOpacity, RefreshControl, Dimensions, Modal } from "react-native";
 import { useCallback, useContext, useEffect, useState } from "react";
 import icon from '../../constants/icon.js'
 import { BlurView } from "expo-blur";
@@ -6,7 +6,7 @@ import { styles } from "./index.js";
 import { Mecanico } from "../../components/mecanico/index.jsx";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-
+import { LocationBanner, LocationModal } from "../../components/Location/index.jsx";
 import api from "../../constants/api.js";
 
 //Acess UseCotext
@@ -19,11 +19,13 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MeetService } from "../../components/service/index.jsx";
 import Loading from "../../components/loading/index.jsx";
 import { Button } from "../../components/button/button.jsx";
+import { FaL } from "react-icons/fa6";
 
-const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAddVechicle, onDeleteVehicle }) => {
+const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAddVechicle, onDeleteVehicle, hasAddress, setOpenModal }) => {
     const dadosCarrocel = [...vehicle, { id_vehicle: 'ADD_BUTTON_KEY', isaddItem: true }]
     const navigate = useNavigation()
     const [loading, setloading] = useState(false)
+
     function EditVehicle(id_vehicle) {
         const findcar = vehicle.find(v => String(v.id) === String(id_vehicle))
         if (!findcar) {
@@ -45,6 +47,9 @@ const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAd
                 <Text style={styles.welcomeText}>Olá, {user?.name || 'Cliente'}</Text>
                 <Text style={styles.subWelcomeText}>Seja bem-vindo de volta!</Text>
             </View>
+            {!hasAddress && (
+                <LocationBanner onOpenRequest={() => setOpenModal(true)}></LocationBanner>
+            )}
             <Text style={styles.sectionTitle}>Seus Carros</Text>
             <FlatList
                 data={dadosCarrocel}
@@ -88,13 +93,19 @@ const RenderHeader = ({ vehicle, user, selectvehicleid, setselectvehicleid, onAd
                 }}
             />
             <Text style={styles.sectionTitle}>Selecione seu Servico</Text>
-
         </View >
     )
 }
 export function TelaHome({ navigation }) {
     const [loading, setloading] = useState(false)
     const waiting = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
+    //realod screen
+    const [refreshing, setrefreshing] = useState(false)
+    //1 - Modal de Localizacao
+    const [showBottonSheet, setshowBottonSheet] = useState(false)
+    const [hasAddress, sethasAddress] = useState(false)
+
     const navigate = useNavigation()
     const { user } = useContext(AuthContext)
     const [mecanicos, setmecanicos] = useState([])
@@ -117,9 +128,13 @@ export function TelaHome({ navigation }) {
         icon_selectmecanico, seticon_selectmecanico,
         avatar_selectmecanico, setavatar_selectmecanico,
     } = useContext(MecanicoContext)
+
     function ClickAddVehicle() {
         navigation.navigate("vehicle")
     }
+    const handleSelectVehicle = useCallback((id) => {
+        setselectvehicleid(id);
+    }, []);
     async function ClickService(id_service, service) {
         const vehicles = vehicle.find(v => (v.id) === selectvehicleid)
         setloading(true)
@@ -179,6 +194,11 @@ export function TelaHome({ navigation }) {
             setloading(false)
         }
     }
+    useEffect(() => {
+        if (user?.cidade != "" && user?.bairro != "" && user?.rua != "" && user?.cep !="") {
+            sethasAddress(true)
+        }
+    }, [user])
     useFocusEffect(
         useCallback(() => {
             LoadHome()
@@ -193,22 +213,47 @@ export function TelaHome({ navigation }) {
         }
         return paginas;
     };
-
+    const HandleAddressSaved = (addres) => {
+        console.log("Endereco recebido na home", addres)
+        setshowBottonSheet(false)
+        sethasAddress(true)
+    }
     const dadosPaginados = formatarDadosEmPaginas(services, 4);
+    const onRefresh = useCallback(async () => {
+        setrefreshing(true);
+        try {
+            await new Promise(resolve => setTimeout(resolve, 2000))
+        } catch (error) {
+            console.log('Error em atualizar', error)
+        } finally {
+            setrefreshing(false)
+        }
+    }, [])
     return (
         <SafeAreaView style={[styles.safearea, { flex: 1, backgroundColor: '#f8fafc' }]}>
             <Loading visible={loading}></Loading>
-            <ScrollView style={{ flex: 1 }} showsHorizontalScrollIndicator={false}>
+            <ScrollView style={{ flex: 1 }}
+                showsHorizontalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        colors={['#003366']}
+                        tintColor={'#003366'}
+                    />
+                }>
                 <RenderHeader
                     vehicle={vehicle}
                     user={user}
                     selectvehicleid={selectvehicleid}
-                    setselectvehicleid={setselectvehicleid}
+                    setselectvehicleid={handleSelectVehicle}
                     onAddVechicle={ClickAddVehicle}
                     onDeleteVehicle={DesvincularVehicle}
+                    hasAddress={hasAddress}
+                    setOpenModal={setshowBottonSheet}
                 >
                 </RenderHeader>
-                <View style={{ height: width > 600 ? 260 : 440,marginVertical:12,width:'100%' }}>
+                <View style={{ height: width > 600 ? 260 : 440, marginVertical: 12, width: '100%' }}>
                     <FlatList
                         data={dadosPaginados}
                         keyExtractor={(_, index) => 'pagina_' + index}
@@ -275,47 +320,56 @@ export function TelaHome({ navigation }) {
                         </View>
                     )}
                 </View>
-
-                {isLocked && (
-                    <BlurView
-                        intensity={25}
-                        tint="light"
-                        style={styles.absoluteOverlay}
-                    >
-                        <View style={styles.alertCard}>
-                            <View style={styles.rowHeader}>
-                                <MaterialCommunityIcons
-                                    name={hasnovehicle ? 'car-electric' : 'car-cog'}
-                                    size={28}
-                                    color='#002F6C'
-                                >
-                                </MaterialCommunityIcons>
-                                <Text style={styles.alertText}>
-                                    {hasnovehicle ? 'Nenhum Veiculo' : 'Atencao'}
-                                </Text>
-                            </View>
-                            <Text style={styles.alertText}>
-                                {hasnovehicle ?
-                                    'Voce precisa cadastrar um veiculo antes de solicitar ou visualizar' :
-                                    'Selecionar um dos seus carros acima para liberar os servicos'}
-                            </Text>
-                            {hasnovehicle && (
-                                <TouchableOpacity
-                                    style={styles.actionButton}
-                                    onPress={ClickAddVehicle}
-                                >
+                <View style={{ position: `relative`, width: `100%` }}>
+                    {isLocked && (
+                        <BlurView
+                            intensity={25}
+                            tint="light"
+                            style={styles.absoluteOverlay}
+                        >
+                            <View style={styles.alertCard}>
+                                <View style={styles.rowHeader}>
                                     <MaterialCommunityIcons
-                                        name='car-info'
-                                        size={20}
-                                        color='#FFFFFF'
-                                    ></MaterialCommunityIcons>
-                                    <Text style={styles.actionButtonText}>Cadastrar Primeiro Carro</Text>
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                    </BlurView>
-                )}
+                                        name={hasnovehicle ? 'car-electric' : 'car-cog'}
+                                        size={28}
+                                        color='#002F6C'
+                                    >
+                                    </MaterialCommunityIcons>
+                                    <Text style={styles.alertText}>
+                                        {hasnovehicle ? 'Nenhum Veiculo' : 'Atencao'}
+                                    </Text>
+                                </View>
+                                <Text style={styles.alertText}>
+                                    {hasnovehicle ?
+                                        'Voce precisa cadastrar um veiculo antes de solicitar ou visualizar' :
+                                        'Selecionar um dos seus carros acima para liberar os servicos'}
+                                </Text>
+                                {hasnovehicle && (
+                                    <TouchableOpacity
+                                        style={styles.actionButton}
+                                        onPress={ClickAddVehicle}
+                                    >
+                                        <MaterialCommunityIcons
+                                            name='car-info'
+                                            size={20}
+                                            color='#FFFFFF'
+                                        ></MaterialCommunityIcons>
+                                        <Text style={styles.actionButtonText}>Cadastrar Primeiro Carro</Text>
+                                    </TouchableOpacity>
+                                )}
+                            </View>
+                        </BlurView>
+                    )}
+                </View>
+
             </ScrollView>
+            <LocationModal
+                visible={showBottonSheet}
+                onClose={() => setshowBottonSheet(false)}
+                onAddresSaved={HandleAddressSaved}
+            />
+
+
 
         </SafeAreaView >
     )

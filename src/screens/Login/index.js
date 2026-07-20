@@ -1,20 +1,22 @@
 import { StyleSheet } from "react-native";
-import {color,font_Size} from '../../constants/theme.js'
+import { color, font_Size } from '../../constants/theme.js'
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F8F9FA',
-
+        alignItems: 'center',
+        padding: 20
     },
-    scrollContainer:{
-        flexGrow:1,
-        justifyContent:'center',
-        paddingHorizontal:24,
-        paddingBottom:24
+    containerinput: {
+        width: '100%',
+        paddingHorizontal: 10
     },
-    logoContainer:{
-        alignItems:"center",
-        marginBottom:40
+    scrollContainer: {
+        flexGrow: 1,
+    },
+    logoContainer: {
+        alignItems: "center",
+        marginBottom: 40
     },
     backgroundImage: {
         position: 'absolute',
@@ -29,14 +31,14 @@ export const styles = StyleSheet.create({
         marginTop: 40,
         marginBottom: 20
     },
-    
+
     formContainer: {
-        backgroundColor:'#ffffff',
-        borderRadius:20,
-        padding:24,
-        borderWidth:1,
-        borderColor:'#cbd5e1',
-        elevation:4
+        backgroundColor: '#ffffff',
+        borderRadius: 20,
+        padding: 24,
+        borderWidth: 1,
+        borderColor: '#cbd5e1',
+        elevation: 4
     },
     inputWrapper: {
         flexDirection: 'row',

@@ -28,23 +28,19 @@ function Login(props) {
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             style={{ flex: 1, backgroundColor: '#e2e8f0' }}>
-            <ImageBackground
-                style={styles.container}
-                source={icon.background}
-                resizeMode="cover"
-            >
-                <TouchableWithoutFeedback
-                    onPress={Keyboard.dismiss}>
-                    <ScrollView
-                        contentContainerStyle={styles.scrollContainer}
-                        keyboardShouldPersistTaps="handled"
-                        showsVerticalScrollIndicator={false}
+            <TouchableWithoutFeedback
+                onPress={Keyboard.dismiss}>
+                <ScrollView
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    keyboardShouldPersistTaps="handled"
+                >
+                    <ImageBackground
+                        style={styles.container}
+                        source={icon.background}
+                        resizeMode="cover"
                     >
                         <Loading visible={loading}></Loading>
-
-                        <View style={styles.logoContainer}>
-                            <Image source={icon.logo} style={styles.logo}></Image>
-                        </View>
+                        <Image source={icon.logo} style={styles.logo}></Image>
                         <View style={styles.containerinput}>
                             {activenotification ?
                                 <ModalCustom msgmodal={msgnotification} statusapi={statusapi} onClose={() => setactivenotification(!activenotification)}></ModalCustom>
@@ -72,10 +68,9 @@ function Login(props) {
                             <Text style={styles.textfoot}>Ja possui uma conta?</Text>
                             <TouchableOpacity onPress={RedirectCadastro}><Text style={styles.textlink}>Clique aqui</Text></TouchableOpacity>
                         </View>
-
-                    </ScrollView>
-                </TouchableWithoutFeedback>
-            </ImageBackground>
+                    </ImageBackground>
+                </ScrollView>
+            </TouchableWithoutFeedback>
         </KeyboardAvoidingView >
     )
 }
