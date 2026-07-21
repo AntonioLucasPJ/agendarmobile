@@ -1,5 +1,8 @@
-import { Platform, StyleSheet } from "react-native";
+import { Dimensions, Platform, StyleSheet, useWindowDimensions } from "react-native";
 import { color, font_Size } from '../../constants/theme.js'
+const { width } = Dimensions.get('window')
+const IS_TABLET = width >= 600
+
 export const styles = StyleSheet.create({
     safearea: {
         flex: 1,
@@ -7,21 +10,21 @@ export const styles = StyleSheet.create({
     },
     header: {
         flexDirection: 'row', // Para alinhar o título e o botão de salvar
-        paddingHorizontal: 24,
-        paddingVertical: 16,
+        paddingHorizontal: IS_TABLET ? 32 : 24,
+        paddingVertical: IS_TABLET ? 20 : 16,
         backgroundColor: '#FFFFFF',
         borderBottomWidth: 1,
         borderBottomColor: '#E2E8F0',
         justifyContent: 'space-between', // Alinha itens nas extremidades
         alignItems: 'center',
         ...Platform.select({
-            web:{
-                maxWidth:600,
-                width:'100%',
-                alignSelf:'center'
+            web: {
+                maxWidth: 1000,
+                width: '100%',
+                alignSelf: 'center'
             },
-            default:{
-                width:'100%'
+            default: {
+                width: '100%'
             }
         })
     },
@@ -42,18 +45,33 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     scrollContent: {
-        padding: 24,
+        padding: IS_TABLET ? 32 : 24,
         paddingBottom: 40,
         ...Platform.select({
-            web:{
-                maxWidth:600,
-                width:'100%',
-                alignSelf:"center"
+            web: {
+                maxWidth: 600,
+                width: '100%',
+                alignSelf: "center"
             },
-            default:{
-                width:'100%'
+            default: {
+                width: '100%'
             }
         })
+    },
+    mainGrid: {
+        width: '100%',
+        maxWidth: 1000, // Limite confortável para leitura em tablets e web
+        flexDirection: IS_TABLET ? 'row' : 'column',
+        alignItems: 'flex-start',
+        justifyContent:"space-between",
+        gap: IS_TABLET ? 24 : 0, // Dp de espaçamento entre as colunas no tablet
+    },
+    gridColumnLeft: {
+        width: IS_TABLET ? '48%' : '100%',
+        marginRight: IS_TABLET ? '2%' : 0,
+    },
+    gridColumnRight: {
+        width: IS_TABLET ? '48%' : '100%',
     },
     profileCard: {
         flexDirection: 'row',

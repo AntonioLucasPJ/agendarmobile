@@ -49,7 +49,9 @@ function Login(props) {
                             }
                             <View style={styles.inputWrapper}>
                                 <Image source={icon.email} style={styles.inputIcon}></Image>
-                                <TextInput keyboardType="email-address" style={styles.input} placeholder='Digite seu email' onChangeText={(e) => setloginemail(e)} value={loginemail}></TextInput>
+                                <TextInput 
+                                keyboardType="email-address" style={styles.input}
+                                placeholder='Digite seu email' onChangeText={(e) => setloginemail(e)} value={loginemail}></TextInput>
                             </View>
                             <View style={styles.inputWrapper}>
                                 <Image source={icon.lock} style={emailvalido ? styles.inputIcon : styles.inputIconDisable}></Image>

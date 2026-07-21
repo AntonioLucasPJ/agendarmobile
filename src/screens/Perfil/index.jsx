@@ -1,5 +1,5 @@
 
-import { Image, Platform, Text, TextInput, TouchableOpacity, View, ScrollView, ActivityIndicator, KeyboardAvoidingView, SafeAreaView, } from 'react-native'
+import { Image, Platform, Text, TextInput, TouchableOpacity, View, ScrollView, ActivityIndicator, KeyboardAvoidingView, SafeAreaView, Alert, } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import profilesteste from './img/carton.jpg'
 import { styles } from './index.js'
@@ -12,6 +12,7 @@ import Loading from '../../components/loading/index.jsx'
 import { useNavigation } from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { LocationModal } from '../../components/Location/index.jsx'
 export function Perfil() {
     const { user, setuser } = useContext(AuthContext);
     const navigation = useNavigation()
@@ -23,6 +24,8 @@ export function Perfil() {
     const [userEmail, setUserEmail] = useState(user?.email || "")
     const [userPhone, setUserPhone] = useState(user?.phone || "")
     const [profilePhoto, setProfilePhoto] = useState(user?.ProfielPhoto || null)
+    const waiting = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
     const handlePickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
@@ -51,11 +54,37 @@ export function Perfil() {
         if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
         return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase()
     }
-
+    const formsvalid = user.name.length >= 15 && user.email.includes('@') && user.telefone.length >= 11
     const handleSaveProfile = async () => {
         if (updatingProfile) return;
+        if (!user.name.trim() || !user.name.trim()) {
+            Alert.alert("Error,", "Nome e Email são obrigatorios")
+            return;
+        }
+        setUpdatingProfile(true)
+        const dadosapi = {
+            name: user.name,
+            email: user.email,
+            cpf: user.cpf,
+            telefone: user.telefone,
+            rua: user.rua,
+            cidade: user.cidade,
+            bairro: user.bairro,
+            cep: user.cep
+        }
+        try {
+            await waiting(1200)
+            const res = await api.put(`/users/edit/${user.id_user}`, dadosapi)
+            if (res.status == 200) {
+                console.log(res.data.message)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setUpdatingProfile(false)
+        }
     }
-    const handleLogout = () => {
+    const handleLogout = async () => {
         console.log('tESTE')
         Alert.alert("Sair", "Deseja realmente sair da sua conta?", [
             { text: "Cancelar", style: "cancel" },
@@ -65,7 +94,7 @@ export function Perfil() {
                 onPress: () => {
                     api.defaults.headers.common['Authorization'] = ""
                     setuser("")
-                    navigation.replace("login")
+                    navigation.navigate("login")
                 }
             }
         ])
@@ -85,7 +114,7 @@ export function Perfil() {
                     {hasUnsavedChanges && (
                         <TouchableOpacity
                             style={styles.saveButton}
-                            onPress={handleSaveProfile}
+                            onPress={() => handleSaveProfile}
                             disabled={updatingProfile}
                         >
                             {updatingProfile ? (
@@ -100,48 +129,52 @@ export function Perfil() {
                     )}
                 </View>
                 <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-                    <View style={styles.profileCard}>
-                        <TouchableOpacity style={styles.avatarContainer} onPress={handlePickImage}>
-                            {profilePhoto ? (
-                                <Image source={{ uri: profilePhoto }} style={styles.avatarPhoto}></Image>
-                            ) : (
-                                <View style={styles.avatarCircle}>
-                                    <Text style={styles.initialsText}>{getInitials(userName)}</Text>
-                                </View>
-                            )}
-                            <View style={styles.editIconContainer}>
-                                <MaterialCommunityIcons name="camera" size={16} color="#ffff"></MaterialCommunityIcons>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={styles.profileInfo}>
-                            <Text style={styles.inputLabel}>Nome</Text>
-                            <TextInput
-                                style={styles.userNameInput}
-                                value={user.name}
-                                onChangeText={(name)=> setuser({...user,name:name})}
-                                placeholder='Digite seu nome'
-                                autoCorrect={false}
-                            ></TextInput>
-                            <Text style={styles.inputLabel}>Email</Text>
-                            <TextInput
-                                style={styles.userEmailInput}
-                                value={user.email}
-                                onChangeText={(email)=> setuser({...user, email:email })}
-                                placeholder='usuario@gmail.com'
-                                keyboardType='email-address'
-                                autoCapitalize='none'
-                                autoCorrect={false}
-                            ></TextInput>
-                            <Text style={styles.inputLabel}>Telefone</Text>
-                            <TextInput
-                                style={styles.userPhoneInput}
-                                value={user.telefone}
-                                maxLength={11}
-                                onChangeText={(telefone)=> setuser({...user, telefone:telefone})}
-                                placeholder='(98) 99999-9999'
-                                keyboardType='phone-pad'
+                    <View style={styles.mainGrid}>
+                        <View style={styles.gridColumnLeft}>
+                            <View style={styles.profileCard}>
+                                <TouchableOpacity style={styles.avatarContainer} onPress={handlePickImage}>
+                                    {profilePhoto ? (
+                                        <Image source={{ uri: profilePhoto }} style={styles.avatarPhoto}></Image>
+                                    ) : (
+                                        <View style={styles.avatarCircle}>
+                                            <Text style={styles.initialsText}>{getInitials(userName)}</Text>
+                                        </View>
+                                    )}
+                                    <View style={styles.editIconContainer}>
+                                        <MaterialCommunityIcons name="camera" size={16} color="#ffff"></MaterialCommunityIcons>
+                                    </View>
+                                </TouchableOpacity>
+                                <View style={styles.profileInfo}>
+                                    <Text style={styles.inputLabel}>Nome</Text>
+                                    <TextInput
+                                        style={styles.userNameInput}
+                                        value={user.name}
+                                        onChangeText={(name) => setuser({ ...user, name: name })}
+                                        placeholder='Digite seu nome'
+                                        autoCorrect={false}
+                                    ></TextInput>
+                                    <Text style={styles.inputLabel}>Email</Text>
+                                    <TextInput
+                                        style={styles.userEmailInput}
+                                        value={user.email}
+                                        onChangeText={(email) => setuser({ ...user, email: email })}
+                                        placeholder='usuario@gmail.com'
+                                        keyboardType='email-address'
+                                        autoCapitalize='none'
+                                        autoCorrect={false}
+                                    ></TextInput>
+                                    <Text style={styles.inputLabel}>Telefone</Text>
+                                    <TextInput
+                                        style={styles.userPhoneInput}
+                                        value={user.telefone}
+                                        maxLength={11}
+                                        onChangeText={(telefone) => setuser({ ...user, telefone: telefone })}
+                                        placeholder='(98) 99999-9999'
+                                        keyboardType='phone-pad'
 
-                            ></TextInput>
+                                    ></TextInput>
+                                </View>
+                            </View>
                         </View>
                     </View>
                     <Text style={styles.sectionTitle}>Localização Cadastrada</Text>
@@ -170,46 +203,51 @@ export function Perfil() {
                             </Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.sectionTitle}>Atalhos Rápidos</Text>
-                    <View style={styles.menuContainer}>
-                        <TouchableOpacity
-                            style={styles.menuItem}
-                            onPress={() => navigation.navigate("vehicle")}
-                        >
-                            <View style={styles.menuItemLeft}>
-                                <MaterialCommunityIcons name='car-cog' size={24} color="#002F6C"></MaterialCommunityIcons>
-                                <Text style={styles.menuItemText}>Gerenciar Meus Veiculos</Text>
-                            </View>
-                            <MaterialCommunityIcons name='chevron-right' size={24} color='#64748B'></MaterialCommunityIcons>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.menuItem, styles.lastMenuItem]}
-                        >
-                            <View
-                                style={styles.menuItemLeft}
+                    <View style={styles.gridColumnRight}>
+                        <Text style={styles.sectionTitle}>Atalhos Rápidos</Text>
+                        <View style={styles.menuContainer}>
+                            <TouchableOpacity
+                                style={styles.menuItem}
+                                onPress={() => navigation.navigate("vehicle")}
                             >
-                                <MaterialCommunityIcons name='history' size={24} color="#002F6C"></MaterialCommunityIcons>
-                                <Text style={styles.menuItemText}>Historico de Chamados</Text>
-                            </View>
-                            <MaterialCommunityIcons name='chevron-right' size={24} color='#64748B'></MaterialCommunityIcons>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.menuItem, styles.lastMenuItem]}
-                            onPress={() => handleLogout}
-                        >
-                            <View
-                                style={styles.menuItemLeft}
+                                <View style={styles.menuItemLeft}>
+                                    <MaterialCommunityIcons name='car-cog' size={24} color="#002F6C"></MaterialCommunityIcons>
+                                    <Text style={styles.menuItemText}>Gerenciar Meus Veiculos</Text>
+                                </View>
+                                <MaterialCommunityIcons name='chevron-right' size={24} color='#64748B'></MaterialCommunityIcons>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.menuItem, styles.lastMenuItem]}
                             >
-                                <MaterialCommunityIcons name='logout' size={24} color="#002F6C"></MaterialCommunityIcons>
-                                <Text style={[styles.menuItemText, { color: "#EF4444" }]} >Sair Da Conta</Text>
-                            </View>
-                            <MaterialCommunityIcons name='chevron-right' size={24} color='#64748B'></MaterialCommunityIcons>
-                        </TouchableOpacity>
+                                <View
+                                    style={styles.menuItemLeft}
+                                >
+                                    <MaterialCommunityIcons name='history' size={24} color="#002F6C"></MaterialCommunityIcons>
+                                    <Text style={styles.menuItemText}>Historico de Chamados</Text>
+                                </View>
+                                <MaterialCommunityIcons name='chevron-right' size={24} color='#64748B'></MaterialCommunityIcons>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.menuItem, styles.lastMenuItem]}
+                                onPress={handleLogout}
+                            >
+                                <View
+                                    style={styles.menuItemLeft}
+                                >
+                                    <MaterialCommunityIcons name='logout' size={24} color="#002F6C"></MaterialCommunityIcons>
+                                    <Text style={[styles.menuItemText, { color: "#EF4444" }]} >Sair Da Conta</Text>
+                                </View>
+                                <MaterialCommunityIcons name='chevron-right' size={24} color='#64748B'></MaterialCommunityIcons>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <Text style={styles.versionText}>Versao 1.0.0</Text>
                 </ScrollView>
             </KeyboardAvoidingView>
+            <LocationModal visible={showAddressModal} onClose={() => setShowAddressModal(!showAddressModal)}></LocationModal>
+
         </SafeAreaProvider>
+
         // <View style={styles.container}>
         //     <View style={styles.imgdiv}>
         //         <Image style={styles.imgprofile} source={profilesteste}></Image>

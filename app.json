@@ -3,7 +3,7 @@
     "name": "agendar",
     "slug": "agendar",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/iconupdate.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
@@ -18,7 +18,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/iconupdate.png",
-        "backgroundColor": "#1E293B"
+        "backgroundColor": "#002F6C"
       },
       "edgeToEdgeEnabled": true,
       "softwareKeyboardLayoutMode":"pan"
